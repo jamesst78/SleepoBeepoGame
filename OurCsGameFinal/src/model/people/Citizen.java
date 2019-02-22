@@ -23,6 +23,76 @@ public class Citizen implements Simulatable , Rescuable  {
 	this.bloodLoss = 0;
 	this.toxicity = 0;
 	}
+
+
+	public CitizenState getState() {
+		return state;
+	}
+
+
+	public void setState(CitizenState state) {
+		this.state = state;
+	}
+
+
+	public Address getLocation() {
+		return location;
+	}
+
+
+	public void setLocation(Address location) {
+		this.location = location;
+	}
+
+
+	public int getHp() {
+		return hp;
+	}
+
+
+	public void setHp(int hp) {
+		this.hp = hp;
+	}
+
+
+	public int getBloodLoss() {
+		return bloodLoss;
+	}
+
+
+	public void setBloodLoss(int bloodLoss) {
+		this.bloodLoss = bloodLoss;
+	}
+
+
+	public int getToxicity() {
+		return toxicity;
+	}
+
+
+	public void setToxicity(int toxicity) {
+		this.toxicity = toxicity;
+	}
+
+
+	public Disaster getDisaster() {
+		return disaster;
+	}
+
+
+	public String getNationalID() {
+		return nationalID;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public int getAge() {
+		return age;
+	}
 	
 	
 	
