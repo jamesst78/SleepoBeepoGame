@@ -1,5 +1,12 @@
 package model.units;
+import simulation.*;
 
-public class FireUnit extends Unit{
+abstract public class FireUnit extends Unit{
 
+	
+	public FireUnit(String id , Address location , int stepsPerCycle) {
+		super(id,location,stepsPerCycle);
+	}
+	
 }
+
