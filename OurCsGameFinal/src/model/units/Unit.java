@@ -16,6 +16,9 @@ abstract public class Unit {
 		this.stepsPerCycle = stepsPerCycle;
 		this.state = UnitState.IDLE;
 	}
+	public Unit() {
+		
+	}
 
 
 
