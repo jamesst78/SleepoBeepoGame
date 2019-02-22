@@ -19,6 +19,14 @@ abstract public class Disaster {
 		return target;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	
 	
 }
