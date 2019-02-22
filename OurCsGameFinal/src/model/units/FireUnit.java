@@ -8,5 +8,9 @@ abstract public class FireUnit extends Unit{
 		super(id,location,stepsPerCycle);
 	}
 	
+	public FireUnit() {
+		
+	}
+	
 }
 
