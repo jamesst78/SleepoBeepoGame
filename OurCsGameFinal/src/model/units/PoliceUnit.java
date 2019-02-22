@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import model.people.Citizen;
 import simulation.Address;
-
 public abstract class PoliceUnit extends Unit{
 	private ArrayList<Citizen> passengers;
 	private int maxCapacity;
