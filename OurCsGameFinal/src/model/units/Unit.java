@@ -1,5 +1,7 @@
 package model.units;
 
-public class Unit {
-
+abstract public class Unit {
+		String unitID;
+		UnitState state;
+		
 }
