@@ -9,4 +9,8 @@ public abstract class MedicalUnit extends Unit {
 	MedicalUnit(String id, Address location, int stepsPerCycle){
 		super(id,location,stepsPerCycle);
 	}
+	
+	public MedicalUnit() {
+		
+	}
 }
