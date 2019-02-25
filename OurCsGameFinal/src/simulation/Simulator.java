@@ -1,6 +1,8 @@
 package simulation;
 import model.*;
 import model.disasters.Disaster;
+import model.disasters.Fire;
+import model.disasters.Injury;
 import model.infrastructure.*;
 import model.people.Citizen;
 import model.units.Unit;
@@ -64,6 +66,9 @@ public class Simulator extends ReadingCSVFile{
 	public static void main(String[] args) throws IOException {
 		readFile("buildings.csv");
 	}
+	
+
+	
 
 	
 	
