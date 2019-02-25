@@ -28,6 +28,7 @@ public class Simulator extends ReadingCSVFile{
 			}
 		}
 		this.loadBuildings("buildings.csv");
+		this.loadCitizens("citizens.csv");
 		
 	}
 	
@@ -39,7 +40,7 @@ public class Simulator extends ReadingCSVFile{
 		while((currentLine = br.readLine()) != null) {
 			//System.out.println(currentLine);
 			String [] result = currentLine.split(",");
-			citizens.add(new Citizen(world[Integer.parseInt(result[0])][Integer.parseInt(result[1])] , ) );
+			citizens.add(new Citizen(world[Integer.parseInt(result[0])][Integer.parseInt(result[1])] , result[2] ,result[3] , Integer.parseInt(result[4]) ) );
 		}
 	}
 	
