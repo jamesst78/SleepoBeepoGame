@@ -12,7 +12,7 @@ public class CommandCenter {
 		ArrayList<Citizen> visibleCitizens;
 		ArrayList<Unit> emergencyUnits;
 		
-		public CommandCenter() {
+		public CommandCenter() throws Exception{
 			this.engine = new Simulator();
 			this.visibleBuildings = new ArrayList<>();
 			this.emergencyUnits = new ArrayList<>();
