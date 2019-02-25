@@ -7,7 +7,7 @@ import model.people.Citizen;
 import simulation.*;
 
 
-public class ResidentialBuilding {
+public class ResidentialBuilding implements Rescuable,Simulatable {
 	private Address location;
 	private int structuralIntegrity = 100;
 	private int fireDamage;

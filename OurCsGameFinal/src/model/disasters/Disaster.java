@@ -5,6 +5,10 @@ abstract public class Disaster {
 	private Rescuable target;
 	private boolean active;
 	
+	
+	public Disaster(){
+		
+	}
 	public Disaster(int startCycle ,Rescuable target ) {
 		this.startCycle = startCycle;
 		this.target = target;
