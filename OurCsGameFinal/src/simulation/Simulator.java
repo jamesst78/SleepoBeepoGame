@@ -79,6 +79,11 @@ public class Simulator extends ReadingCSVFile{
 			}
 			
 		} }
+	
+	
+	
+	
+	
 		
 		
 	
@@ -92,6 +97,35 @@ public class Simulator extends ReadingCSVFile{
 		readFile("buildings.csv");
 		
 	}
+	
+	
+	public void loadDisasters(String path) throws IOException{
+		Citizen x ;
+		String currentLine="";
+		ArrayList<String> returnPlis = new ArrayList<String>();
+		FileReader fileReader = new FileReader(path);
+		BufferedReader br = new BufferedReader(fileReader);
+		while((currentLine = br.readLine()) != null) {
+			//System.out.println(currentLine);
+			String [] result = currentLine.split(",");
+			if(Integer.parseInt(result[2])>10) {
+				switch(result[1]) {
+				for(int i = 0 ; i<citizens.size();i++) {
+				 x = citizens.get(i);
+					if(x.getNationalID().equals(result[2]))
+						break;
+				}
+				
+			case "INJ":plannedDisasters.add(new Injury(Integer.parseInt(result[0]) ,x )); break;
+				}
+			}
+			
+			
+			
+			
+	}
+}
+
 	
 
 	
