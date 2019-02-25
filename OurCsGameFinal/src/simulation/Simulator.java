@@ -19,14 +19,19 @@ public class Simulator extends ReadingCSVFile{
 	ArrayList<Disaster> plannedDisasters;
 	ArrayList<Disaster> excutedDisasters;
 	Address [][] world = new Address[10][10];
-	Address [] world2 = new Address[10];
 	
-	public Simulator() {
-		for()
+	
+	public Simulator() throws Exception{
+		for(int i = 0 ; i<10 ; i++) {
+			for(int k = 0 ; k<10 ; k++) {
+				this.world[i][k] = new Address(i,k);
+			}
+		}
+		this.loadBuildings("buildings.csv");
+		
 	}
 	
-	
-	public void loadBuildings(String path)throws IOException {
+	private void loadCitizens(String path) throws IOException{
 		String currentLine="";
 		ArrayList<String> returnPlis = new ArrayList<String>();
 		FileReader fileReader = new FileReader(path);
@@ -34,7 +39,20 @@ public class Simulator extends ReadingCSVFile{
 		while((currentLine = br.readLine()) != null) {
 			//System.out.println(currentLine);
 			String [] result = currentLine.split(",");
-			buildings.add(new ResidentialBuilding(world[result[0],result[1]]));
+			citizens.add(new Citizen(world[Integer.parseInt(result[0])][Integer.parseInt(result[1])] , ) );
+		}
+	}
+	
+	
+	private void loadBuildings(String path)throws IOException {
+		String currentLine="";
+		ArrayList<String> returnPlis = new ArrayList<String>();
+		FileReader fileReader = new FileReader(path);
+		BufferedReader br = new BufferedReader(fileReader);
+		while((currentLine = br.readLine()) != null) {
+			//System.out.println(currentLine);
+			String [] result = currentLine.split(",");
+			buildings.add(new ResidentialBuilding(world[Integer.parseInt(result[0])][Integer.parseInt(result[1])]));
 		}
 		
 		
