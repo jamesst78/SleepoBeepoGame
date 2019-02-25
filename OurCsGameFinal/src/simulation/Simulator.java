@@ -31,7 +31,7 @@ public class Simulator extends ReadingCSVFile{
 		this.loadCitizens("citizens.csv");
 		
 	}
-	//hiiii
+	//hiiiiui
 	private void loadCitizens(String path) throws IOException{
 		String currentLine="";
 		ArrayList<String> returnPlis = new ArrayList<String>();
