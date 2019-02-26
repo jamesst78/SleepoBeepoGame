@@ -2,6 +2,8 @@ package simulation;
 import model.*;
 import model.disasters.Disaster;
 import model.disasters.Fire;
+import model.disasters.GasLeak;
+import model.disasters.Infection;
 import model.disasters.Injury;
 import model.infrastructure.*;
 import model.people.Citizen;
@@ -36,6 +38,8 @@ public class Simulator extends ReadingCSVFile{
 		}
 		this.loadBuildings("buildings.csv");
 		this.loadCitizens("citizens.csv");
+		this.loadDisasters("disasters.csv");
+		this.loadUnits("units.csv");
 		
 	}
 	//hiiiiui
@@ -82,15 +86,7 @@ public class Simulator extends ReadingCSVFile{
 	
 	
 	
-	
-	
-		
-		
-	
-		
-		
-		
-		
+			
 	
 	
 	public static void main(String[] args) throws IOException {
@@ -99,8 +95,9 @@ public class Simulator extends ReadingCSVFile{
 	}
 	
 	
-	public void loadDisasters(String path) throws IOException{
-		Citizen x ;
+	public void loadDisasters(String path) throws Exception{
+		Citizen x = null ;
+		ResidentialBuilding y = null;
 		String currentLine="";
 		ArrayList<String> returnPlis = new ArrayList<String>();
 		FileReader fileReader = new FileReader(path);
@@ -109,14 +106,29 @@ public class Simulator extends ReadingCSVFile{
 			//System.out.println(currentLine);
 			String [] result = currentLine.split(",");
 			if(Integer.parseInt(result[2])>10) {
-				switch(result[1]) {
 				for(int i = 0 ; i<citizens.size();i++) {
-				 x = citizens.get(i);
-					if(x.getNationalID().equals(result[2]))
-						break;
+					 x = citizens.get(i);
+						if(x.getNationalID().equals(result[2]))
+							break;
+					}
+				switch(result[1]) {
+								
+			case "INJ": plannedDisasters.add(new Injury(Integer.parseInt(result[0]) ,x )); break;
+			case "INF": plannedDisasters.add(new Infection(Integer.parseInt(result[0]) , x));break;
 				}
-				
-			case "INJ":plannedDisasters.add(new Injury(Integer.parseInt(result[0]) ,x )); break;
+			}
+			else {
+				for(int i = 0 ; i<buildings.size() ; i++) {
+					y = buildings.get(i);
+					if(y.getLocation().getX() == Integer.parseInt(result[2]) &&
+							y.getLocation().getY() == Integer.parseInt(result[3])) {
+						break;
+					}
+						
+				}
+				switch(result[1]) {
+				case "FIR" : plannedDisasters.add(new Fire(Integer.parseInt(result[0]) , y));
+				case "GLK" : plannedDisasters.add(new GasLeak(Integer.parseInt(result[0]) , y));
 				}
 			}
 			
