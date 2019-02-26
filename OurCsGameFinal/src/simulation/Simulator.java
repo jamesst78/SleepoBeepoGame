@@ -44,6 +44,7 @@ public class Simulator extends ReadingCSVFile{
 	}
 	//hiiiiui
 	private void loadCitizens(String path) throws IOException{
+		ResidentialBuilding y = null;
 		String currentLine="";
 		ArrayList<String> returnPlis = new ArrayList<String>();
 		FileReader fileReader = new FileReader(path);
@@ -51,7 +52,18 @@ public class Simulator extends ReadingCSVFile{
 		while((currentLine = br.readLine()) != null) {
 			//System.out.println(currentLine);
 			String [] result = currentLine.split(",");
-			citizens.add(new Citizen(world[Integer.parseInt(result[0])][Integer.parseInt(result[1])] , result[2] ,result[3] , Integer.parseInt(result[4]) ) );
+			Citizen k = new Citizen(world[Integer.parseInt(result[0])][Integer.parseInt(result[1])] , result[2] ,result[3] , Integer.parseInt(result[4]));
+			citizens.add(k);
+			for(int i = 0 ; i<buildings.size() ; i++) {
+				y = buildings.get(i);
+				if(y.getLocation().getX() == Integer.parseInt(result[0]) &&
+						y.getLocation().getY() == Integer.parseInt(result[1])) {
+					break;
+				}
+					
+			}
+			y.getOccupants().add(k);
+			
 		}
 	}
 	
