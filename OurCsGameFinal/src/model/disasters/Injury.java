@@ -9,8 +9,8 @@ public class Injury extends Disaster{
 	}
 	
 	public Injury(int cycle, Citizen target) throws Exception{
-		cycle=getStartCycle();
-		target=(Citizen)getTarget();
+		
+		super(cycle,target);
 		
 		
 	}

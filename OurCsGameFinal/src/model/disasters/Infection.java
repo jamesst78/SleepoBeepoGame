@@ -9,9 +9,7 @@ public class Infection extends Disaster {
 	
 	public Infection(int cycle, Citizen target){
 		
-		target=(Citizen)getTarget();
-		cycle=getStartCycle();
-		
+		super(cycle,target);
 		
 		
 	}

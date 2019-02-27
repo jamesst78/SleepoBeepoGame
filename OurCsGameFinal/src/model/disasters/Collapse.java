@@ -10,8 +10,7 @@ public class Collapse extends Disaster {
 	
 	public Collapse(int cycle, ResidentialBuilding target){
 		
-		cycle=getStartCycle();
-		target=(ResidentialBuilding)getTarget();
+		super(cycle,target);
 	}
 
 }
