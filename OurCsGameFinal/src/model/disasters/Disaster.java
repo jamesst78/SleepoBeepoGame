@@ -1,6 +1,6 @@
 package model.disasters;
 import simulation.*;
-abstract public class Disaster {
+abstract public class Disaster implements Simulatable {
 	private int startCycle;
 	private Rescuable target;
 	private boolean active;

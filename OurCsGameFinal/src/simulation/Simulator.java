@@ -21,13 +21,13 @@ import java.io.IOException;
 import java.util.*;
 public class Simulator extends ReadingCSVFile{
 
-	int currentCycle;
-	ArrayList<ResidentialBuilding> buildings;
-	ArrayList<Citizen> citizens;
-	ArrayList<Unit> emergencyUnits;
-	ArrayList<Disaster> plannedDisasters;
-	ArrayList<Disaster> excutedDisasters;
-	Address [][] world = new Address[10][10];
+	private int currentCycle;
+	private ArrayList<ResidentialBuilding> buildings;
+	private ArrayList<Citizen> citizens;
+	private	ArrayList<Unit> emergencyUnits;
+	private	ArrayList<Disaster> plannedDisasters;
+	private ArrayList<Disaster> executedDisasters;
+	private Address [][] world = new Address[10][10];
 	
 	
 	public Simulator() throws Exception{
@@ -35,6 +35,12 @@ public class Simulator extends ReadingCSVFile{
 			for(int k = 0 ; k<10 ; k++) {
 				this.world[i][k] = new Address(i,k);
 			}
+			 buildings = new ArrayList<>();
+			 citizens = new ArrayList<>();
+			 emergencyUnits = new ArrayList<>(); 
+			 plannedDisasters = new ArrayList<>();
+			 executedDisasters = new ArrayList<>();
+			
 		}
 		this.loadBuildings("buildings.csv");
 		this.loadCitizens("citizens.csv");
@@ -46,7 +52,6 @@ public class Simulator extends ReadingCSVFile{
 	private void loadCitizens(String path) throws IOException{
 		ResidentialBuilding y = null;
 		String currentLine="";
-		ArrayList<String> returnPlis = new ArrayList<String>();
 		FileReader fileReader = new FileReader(path);
 		BufferedReader br = new BufferedReader(fileReader);
 		while((currentLine = br.readLine()) != null) {
@@ -70,7 +75,6 @@ public class Simulator extends ReadingCSVFile{
 	
 	private void loadBuildings(String path)throws IOException {
 		String currentLine="";
-		ArrayList<String> returnPlis = new ArrayList<String>();
 		FileReader fileReader = new FileReader(path);
 		BufferedReader br = new BufferedReader(fileReader);
 		while((currentLine = br.readLine()) != null) {
@@ -108,7 +112,7 @@ public class Simulator extends ReadingCSVFile{
 	
 	
 	public void loadDisasters(String path) throws Exception{
-		Citizen x = null ;
+		String z = "";
 		ResidentialBuilding y = null;
 		String currentLine="";
 		ArrayList<String> returnPlis = new ArrayList<String>();
@@ -117,38 +121,52 @@ public class Simulator extends ReadingCSVFile{
 		while((currentLine = br.readLine()) != null) {
 			//System.out.println(currentLine);
 			String [] result = currentLine.split(",");
-			if(Integer.parseInt(result[2])>10) {
-				for(int i = 0 ; i<citizens.size();i++) {
-					 x = citizens.get(i);
-						if(x.getNationalID().equals(result[2]))
-							break;
-					}
+			 
+				
 				switch(result[1]) {
 								
-			case "INJ": plannedDisasters.add(new Injury(Integer.parseInt(result[0]) ,x )); break;
-			case "INF": plannedDisasters.add(new Infection(Integer.parseInt(result[0]) , x));break;
+			case "INJ": plannedDisasters.add(new Injury(Integer.parseInt(result[0]) ,this.getTheCitizen(result[2]) )); break;
+			case "INF": plannedDisasters.add(new Infection(Integer.parseInt(result[0]) , this.getTheCitizen(result[2])));break;
 				}
-			}
-			else {
-				for(int i = 0 ; i<buildings.size() ; i++) {
-					y = buildings.get(i);
-					if(y.getLocation().getX() == Integer.parseInt(result[2]) &&
-							y.getLocation().getY() == Integer.parseInt(result[3])) {
-						break;
-					}
-						
-				}
+			
+			
+				
 				switch(result[1]) {
-				case "FIR" : plannedDisasters.add(new Fire(Integer.parseInt(result[0]) , y));
-				case "GLK" : plannedDisasters.add(new GasLeak(Integer.parseInt(result[0]) , y));
+				case "FIR" : plannedDisasters.add(new Fire(Integer.parseInt(result[0]) , this.getTheBuilding(result[2], result[3])));break;
+				case "GLK" : plannedDisasters.add(new GasLeak(Integer.parseInt(result[0]) , this.getTheBuilding(result[2], result[3])));break;
 				}
-			}
+			
 			
 			
 			
 			
 	}
 }
+	
+	
+	
+	public  Citizen getTheCitizen(String z) {
+		Citizen x = null ;
+		for(int i = 0 ; i<citizens.size();i++) {
+			 x = citizens.get(i);
+				if(x.getNationalID().equals(z))
+					break;
+			}return x;
+	}
+	
+	public ResidentialBuilding getTheBuilding(String z2, String z3) {
+		ResidentialBuilding y = null;
+		for(int i = 0 ; i<buildings.size() ; i++) {
+			y = buildings.get(i);
+			if(y.getLocation().getX() == Integer.parseInt(z2) &&
+					y.getLocation().getY() == Integer.parseInt(z3)) {
+				break;
+			}
+				
+		}
+		return y;
+		
+	}
 
 	
 

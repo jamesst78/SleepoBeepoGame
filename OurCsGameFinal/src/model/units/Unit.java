@@ -1,12 +1,12 @@
 package model.units;
 import simulation.*;
-abstract public class Unit {
-		String unitID;
-		UnitState state;
-		Address location;
-		Rescuable target;
-		int distanceToTarget;
-		int stepsPerCycle;
+abstract public class Unit implements Simulatable {
+		private String unitID;
+		private UnitState state;
+		private Address location;
+		private Rescuable target;
+		private int distanceToTarget;
+		private int stepsPerCycle;
 		
 		
 		
@@ -58,7 +58,8 @@ abstract public class Unit {
 
 
 
-	public void setTarget(Rescuable target) {
-		this.target = target;
+	public Rescuable getTarget() {
+		return target;
 	}
+	
 }

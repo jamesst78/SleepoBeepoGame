@@ -19,6 +19,10 @@ public class Citizen implements Simulatable , Rescuable  {
 	
 	public Citizen(Address location , String nationalID , String name , int age) {
 	this.state = CitizenState.SAFE ;
+	this.location = location;
+	this.nationalID = nationalID;
+	this.name = name;
+	this.age = age;
 	this.hp = 100;
 	this.bloodLoss = 0;
 	this.toxicity = 0;

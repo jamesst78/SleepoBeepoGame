@@ -55,6 +55,7 @@ public class ResidentialBuilding implements Rescuable,Simulatable {
 	
 	public ResidentialBuilding(Address location) {
 		this.location = location;
+		this.occupants = new ArrayList<>();
 	}
 	
 
