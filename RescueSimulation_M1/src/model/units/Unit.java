@@ -1,5 +1,6 @@
 package model.units;
 
+import model.events.WorldListener;
 import simulation.Address;
 import simulation.Rescuable;
 import simulation.Simulatable;
@@ -12,6 +13,8 @@ public abstract class Unit implements Simulatable {
 	private Rescuable target;
 	private int distanceToTarget;
 	private int stepsPerCycle;
+	private WorldListener worldListener;
+	
 
 	public Unit(String unitID, Address location, int stepsPerCycle) {
 
@@ -48,6 +51,40 @@ public abstract class Unit implements Simulatable {
 
 	public int getStepsPerCycle() {
 		return stepsPerCycle;
+	}
+
+	public WorldListener getWorldListener() {
+		return worldListener;
+	}
+
+	public void setWorldListener(WorldListener worldListener) {
+		this.worldListener = worldListener;
+	}
+
+	public void setDistanceToTarget(int distanceToTarget) {
+		this.distanceToTarget = distanceToTarget;
+	}
+	
+	public void cycleStep() {
+		
+			Address Targetloc = this.getTarget().getLocation();
+	int distance = Targetloc.getX() + Targetloc.getY();
+	
+	if(this.getState() == UnitState.TREATING) {
+		this.getTarget().treat();
+	}
+	if(this.getState() == UnitState.RESPONDING) {
+		distance-=this.getStepsPerCycle();
+		this.setDistanceToTarget(distance);
+		if(distance ==0) {
+			this.setLocation(Targetloc);
+			this.setState(UnitState.TREATING);
+		}
+	}
+}
+	
+	public void treat() {
+		
 	}
 
 }

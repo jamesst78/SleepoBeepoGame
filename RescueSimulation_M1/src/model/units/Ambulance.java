@@ -9,5 +9,9 @@ public class Ambulance extends MedicalUnit {
 		super(unitID, location, stepsPerCycle);
 
 	}
+	
+	public void cycleStep() {
+
+	}
 
 }

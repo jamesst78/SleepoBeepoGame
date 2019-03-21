@@ -9,5 +9,8 @@ public class Fire extends Disaster {
 		super(startCycle, target);
 
 	}
+public void cycleStep() {
+		
+	}
 
 }

@@ -4,6 +4,8 @@ import simulation.Address;
 import simulation.Rescuable;
 import simulation.Simulatable;
 import model.disasters.Disaster;
+import model.events.SOSListener;
+import model.events.WorldListener;
 
 public class Citizen implements Rescuable, Simulatable {
 
@@ -16,7 +18,8 @@ public class Citizen implements Rescuable, Simulatable {
 	private int bloodLoss;
 	private int toxicity;
 	private Address location;
-
+	private SOSListener emergencyService;
+	private WorldListener worldListener;
 	public Citizen(Address location, String nationalID, String name, int age) {
 
 		this.name = name;
@@ -49,7 +52,16 @@ public class Citizen implements Rescuable, Simulatable {
 	}
 
 	public void setHp(int hp) {
-		this.hp = hp;
+		
+		if(hp >=100)
+			this.hp = 100;
+		if(hp<=0)
+			this.hp = 0;
+		else
+			this.hp = hp;
+		
+		if(this.hp == 0)
+			this.setState(this.state.DECEASED);
 	}
 
 	public int getBloodLoss() {
@@ -57,7 +69,18 @@ public class Citizen implements Rescuable, Simulatable {
 	}
 
 	public void setBloodLoss(int bloodLoss) {
+		if(bloodLoss>=100) {
+			this.bloodLoss = 100;
+		}
+		if(bloodLoss<=0)
+			this.bloodLoss = 0;
+		else
 		this.bloodLoss = bloodLoss;
+		
+		if(bloodLoss ==100) {
+			this.setHp(0);
+			
+		}
 	}
 
 	public int getToxicity() {
@@ -65,7 +88,14 @@ public class Citizen implements Rescuable, Simulatable {
 	}
 
 	public void setToxicity(int toxicity) {
-		this.toxicity = toxicity;
+		if(this.toxicity>=100)
+			this.toxicity = 100;
+		if(this.toxicity <=0)
+			this.toxicity = 0;
+		else
+			this.toxicity = toxicity;
+		if(this.toxicity==100)
+			this.setHp(0);
 	}
 
 	public Address getLocation() {
@@ -84,4 +114,36 @@ public class Citizen implements Rescuable, Simulatable {
 		return nationalID;
 	}
 
+	@Override
+	public void cycleStep() {
+		if((this.bloodLoss <30 && bloodLoss>0) || this.toxicity <30 && this.toxicity>0 ) {
+			this.hp = hp-5;
+		}
+		if((this.bloodLoss >=30 && bloodLoss<70) || this.toxicity >=30 && this.toxicity<70 ) {
+			this.hp = hp-10;
+		}
+		if((this.bloodLoss >=70) || this.toxicity >=70 ) {
+			this.hp = hp-15;
+		}
+		
+		
+	}
+
+	public WorldListener getWorldListener() {
+		return worldListener;
+	}
+
+	public void setWorldListener(WorldListener worldListener) {
+		this.worldListener = worldListener;
+	}
+
+	public void setEmergencyService(SOSListener emergencyService) {
+		this.emergencyService = emergencyService;
+	}
+	
+	public void treat() {
+		
+	}
+	
+	
 }

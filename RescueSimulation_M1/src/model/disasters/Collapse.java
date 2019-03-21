@@ -10,4 +10,11 @@ public class Collapse extends Disaster {
 
 	}
 
+	@Override
+	public void cycleStep() {
+		
+		
+	}
+	
+
 }

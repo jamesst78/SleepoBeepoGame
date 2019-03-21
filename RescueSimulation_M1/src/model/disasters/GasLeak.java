@@ -9,5 +9,8 @@ public class GasLeak extends Disaster {
 		super(startCycle, target);
 
 	}
+public void cycleStep() {
+		
+	}
 
 }

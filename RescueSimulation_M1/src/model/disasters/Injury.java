@@ -9,5 +9,8 @@ public class Injury extends Disaster {
 		super(startCycle, target);
 
 	}
+public void cycleStep() {
+		
+	}
 
 }

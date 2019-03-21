@@ -9,5 +9,8 @@ public class Infection extends Disaster {
 		super(startCycle, target);
 
 	}
+public void cycleStep() {
+		
+	}
 
 }
