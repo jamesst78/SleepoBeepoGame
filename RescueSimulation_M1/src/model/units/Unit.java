@@ -70,13 +70,18 @@ public abstract class Unit implements Simulatable {
 			Address Targetloc = this.getTarget().getLocation();
 	int distance = Targetloc.getX() + Targetloc.getY();
 	
+	if(this.getState() == UnitState.IDLE) {
+		
+	}
+	
 	if(this.getState() == UnitState.TREATING) {
 		this.getTarget().treat();
+		this.setState(UnitState.IDLE);
 	}
 	if(this.getState() == UnitState.RESPONDING) {
 		distance-=this.getStepsPerCycle();
 		this.setDistanceToTarget(distance);
-		if(distance ==0) {
+		if(distance <=0) {
 			this.setLocation(Targetloc);
 			this.setState(UnitState.TREATING);
 		}
