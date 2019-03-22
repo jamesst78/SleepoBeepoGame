@@ -1,4 +1,5 @@
-/tests/
+/controller/
+/exceptions/
 /model/
 /simulation/
-/controller/
+/tests/
