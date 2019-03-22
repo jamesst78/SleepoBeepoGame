@@ -17,6 +17,9 @@ public class GasControlUnit extends FireUnit {
 		ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
 		int change = x.getGasLevel()-10;
 		x.setGasLevel(change);
+		
+		
+		//shouldnt we make it that if the Gas leve reaches 0 , it should end the treatment and start changing the state to idle?
 		}
 	}
 
