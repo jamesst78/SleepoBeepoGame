@@ -1,6 +1,12 @@
 package model.events;
 
-public interface WorldListener {
+import java.util.EventListener;
+
+import simulation.Simulatable;
+
+public interface WorldListener extends EventListener{
 	
 
+	
+		public void assignAddress(Simulatable sim , int x , int y);
 }

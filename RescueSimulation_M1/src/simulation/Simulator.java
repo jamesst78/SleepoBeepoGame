@@ -9,6 +9,7 @@ import model.disasters.Fire;
 import model.disasters.GasLeak;
 import model.disasters.Infection;
 import model.disasters.Injury;
+import model.events.WorldListener;
 import model.infrastructure.ResidentialBuilding;
 import model.people.Citizen;
 import model.units.Ambulance;
@@ -18,7 +19,7 @@ import model.units.FireTruck;
 import model.units.GasControlUnit;
 import model.units.Unit;
 
-public class Simulator {
+public class Simulator implements WorldListener {
 
 	private int currentCycle;
 	private ArrayList<ResidentialBuilding> buildings;
@@ -62,23 +63,28 @@ public class Simulator {
 	}
 
 	private void loadUnits(String path) throws Exception {
-
+		WorldListener worldListener;
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		String line = br.readLine();
+		ArrayList <WorldListener> ListOfListeners= new ArrayList<>();
+			
 
 		while (line != null) {
 
 			String[] info = line.split(",");
 			String id = info[1];
 			int steps = Integer.parseInt(info[2]);
-
+			
+			
 			switch (info[0]) {
 
 			case "AMB":
+				
 				emergencyUnits.add(new Ambulance(id, world[0][0], steps));
 				break;
 
 			case "DCU":
+				
 				emergencyUnits.add(new DiseaseControlUnit(id, world[0][0], steps));
 				break;
 
@@ -208,4 +214,21 @@ public class Simulator {
 
 		return null;
 	}
+
+	@Override
+	public void assignAddress(Simulatable sim, int x, int y) {
+			if(sim instanceof Citizen) {
+				Citizen C = (Citizen)sim;
+				C.setLocation(world[x][y]);
+			}
+			if(sim instanceof Unit) {
+				Unit U = (Unit)sim;
+				U.setLocation(world[x][y]);
+				
+			}
+		
+	}
+	
+	
+	
 }

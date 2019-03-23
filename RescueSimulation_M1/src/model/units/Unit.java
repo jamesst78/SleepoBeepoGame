@@ -4,6 +4,7 @@ import model.events.WorldListener;
 import simulation.Address;
 import simulation.Rescuable;
 import simulation.Simulatable;
+import simulation.Simulator;
 
 public abstract class Unit implements Simulatable {
 
@@ -16,12 +17,13 @@ public abstract class Unit implements Simulatable {
 	private WorldListener worldListener;
 	
 
-	public Unit(String unitID, Address location, int stepsPerCycle) {
+	public Unit(String unitID, Address location, int stepsPerCycle ,WorldListener toAdd) {
 
 		this.unitID = unitID;
 		this.location = location;
 		this.stepsPerCycle = stepsPerCycle;
 		this.state = UnitState.IDLE;
+		this.worldListener = toAdd;
 
 	}
 
@@ -70,9 +72,7 @@ public abstract class Unit implements Simulatable {
 			Address Targetloc = this.getTarget().getLocation();
 	int distance = Targetloc.getX() + Targetloc.getY();
 	
-	if(this.getState() == UnitState.IDLE) {
-		//notsat
-	}
+	
 	
 	if(this.getState() == UnitState.TREATING) {
 		this.getTarget().treat();
@@ -80,16 +80,25 @@ public abstract class Unit implements Simulatable {
 		
 	}
 	if(this.getState() == UnitState.RESPONDING) {
-		distance-=this.getStepsPerCycle();
+		distance= distance-this.getStepsPerCycle();
 		this.setDistanceToTarget(distance);
 		if(distance <=0) {
 			this.setLocation(Targetloc);
 			this.setState(UnitState.TREATING);
+			
 		}
 	}
 }
 	
 	public void treat() {
+		
+	}
+	
+	public void jobsDone() {
+		if(this.getState().equals(UnitState.TREATING)) {
+			this.setState(UnitState.IDLE);
+			
+		}
 		
 	}
 
