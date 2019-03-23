@@ -71,7 +71,7 @@ public abstract class Unit implements Simulatable {
 	int distance = Targetloc.getX() + Targetloc.getY();
 	
 	if(this.getState() == UnitState.IDLE) {
-		
+		//notsat
 	}
 	
 	if(this.getState() == UnitState.TREATING) {
