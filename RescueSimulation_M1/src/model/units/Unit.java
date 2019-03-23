@@ -77,6 +77,7 @@ public abstract class Unit implements Simulatable {
 	if(this.getState() == UnitState.TREATING) {
 		this.getTarget().treat();
 		this.setState(UnitState.IDLE);
+		
 	}
 	if(this.getState() == UnitState.RESPONDING) {
 		distance-=this.getStepsPerCycle();
