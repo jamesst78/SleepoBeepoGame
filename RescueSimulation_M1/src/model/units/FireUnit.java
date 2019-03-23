@@ -17,6 +17,7 @@ public abstract class FireUnit extends Unit {
 			ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
 			int change = x.getFireDamage()-10;
 			x.setFireDamage(change);
+			//shouldnt we make it that if the fire level reaches 0 , it should end the treatment and start changing the state to idle?
 		}
 	}
 }
