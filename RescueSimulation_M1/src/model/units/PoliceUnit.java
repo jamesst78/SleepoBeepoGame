@@ -37,29 +37,19 @@ public abstract class PoliceUnit extends Unit {
 	
 	public void cycleStep() {
 		
-		Address Targetloc = this.getTarget().getLocation();
-		int distance = Targetloc.getX() + Targetloc.getY();
-
-
-
-		if(this.getState() == UnitState.TREATING) {
-				this.getTarget().treat();
-				this.setState(UnitState.IDLE);
-	
-		}
-		if(this.getState() == UnitState.RESPONDING) {
-			if(//EL LOCATION BTA3 EL UNIT FE 0 , 0)
-				distance= distance-this.getStepsPerCycle();
-				this.setDistanceToTarget(distance);
-		if(distance <=0) {
-				this.setLocation(Targetloc);
-				this.setState(UnitState.TREATING);
-				
-				
-			if(//EL LOCATION BTA3 EL UNIT ALREADY 3ND EL TARGET)	
+		
+		//Law el unit responding
+		//a7aded hal howa ray7 wla rag3?
+		//I selected one of the two
+		//ha call treat
+		//h2leb el state le treating
+		//el treat should load citizens on the car
+		//BA2ET el cycle step , should deliver the citizens to the base / back to the location
+		//once Im back ANDDDD theres a flag , en ana lesa m5lst4 , 
+		//I'll call treat again
 	}
-}
-}
+
+
 	
 	public void treat() {
 		if(this.getTarget() instanceof ResidentialBuilding) {
