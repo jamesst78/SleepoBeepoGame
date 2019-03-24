@@ -1,11 +1,5 @@
 /model/
-<<<<<<< HEAD
-/simulation/
-=======
-<<<<<<< HEAD
 /controller/
-/exceptions/
+/simulation/
 /tests/
-=======
->>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
->>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
+/view/
