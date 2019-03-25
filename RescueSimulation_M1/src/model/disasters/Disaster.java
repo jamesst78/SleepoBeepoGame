@@ -1,5 +1,8 @@
 package model.disasters;
 
+import model.infrastructure.ResidentialBuilding;
+import model.people.Citizen;
+import model.people.CitizenState;
 import simulation.Rescuable;
 import simulation.Simulatable;
 
@@ -32,8 +35,39 @@ public abstract class Disaster implements Simulatable {
 		return target;
 	}
 	
-	public void cycleStep() {
+	public abstract void cycleStep();
 		
+	
+	public void strike() {
+		this.setActive(true);
+		ResidentialBuilding b = (ResidentialBuilding)this.getTarget();
+		Citizen c = (Citizen)this.getTarget();
+		if(this.target instanceof Citizen) {
+			c.setState(CitizenState.IN_TROUBLE);
+		}
+		
+		if(this instanceof Collapse) {
+			b.setFoundationDamage(b.getFoundationDamage()+10);
+			
+		}
+		if(this instanceof Fire) {
+			b.setFireDamage(b.getFireDamage()+10);
+			
+		}
+		if(this instanceof GasLeak) {
+			b.setGasLevel(b.getGasLevel()+10);
+	
+}
+		if(this instanceof Infection) {
+			c.setToxicity(c.getToxicity()+25);
+	
+}
+		if(this instanceof Injury) {
+			c.setBloodLoss(c.getBloodLoss()+30);
+	
+}
+
 	}
+	
 
 }

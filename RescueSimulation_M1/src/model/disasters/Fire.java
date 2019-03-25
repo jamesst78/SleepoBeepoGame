@@ -10,7 +10,8 @@ public class Fire extends Disaster {
 
 	}
 public void cycleStep() {
-		
+	ResidentialBuilding b = (ResidentialBuilding)this.getTarget();
+	b.setFireDamage(b.getFireDamage()+10);
 	}
 
 }

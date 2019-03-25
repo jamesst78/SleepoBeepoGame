@@ -10,7 +10,8 @@ public class Injury extends Disaster {
 
 	}
 public void cycleStep() {
-		
+	Citizen c= (Citizen)this.getTarget();
+	c.setBloodLoss(c.getBloodLoss()+10);
 	}
 
 }

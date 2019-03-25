@@ -61,7 +61,7 @@ public class Citizen implements Rescuable, Simulatable {
 			this.hp = hp;
 		
 		if(this.hp == 0)
-			this.setState(this.state.DECEASED);
+			this.setState(CitizenState.DECEASED);
 	}
 
 	public int getBloodLoss() {
@@ -143,6 +143,11 @@ public class Citizen implements Rescuable, Simulatable {
 	
 	public void treat() {
 		
+	}
+	public void struckBy(Disaster d) {
+		this.disaster = d;
+		this.disaster.strike();
+		emergencyService.receiveSOSCall(this);
 	}
 	
 	

@@ -10,8 +10,10 @@ public class Collapse extends Disaster {
 
 	}
 
-	@Override
+	
 	public void cycleStep() {
+		ResidentialBuilding b = (ResidentialBuilding)this.getTarget();
+		b.setFoundationDamage(b.getFireDamage()+10);
 		
 		
 	}
