@@ -49,6 +49,7 @@ public abstract class Disaster implements Simulatable {
 		if(this instanceof Collapse) {
 			b.setFoundationDamage(b.getFoundationDamage()+10);
 			
+			
 		}
 		if(this instanceof Fire) {
 			b.setFireDamage(b.getFireDamage()+10);
