@@ -1,6 +1,7 @@
 package model.units;
 
 import model.events.WorldListener;
+import model.people.Citizen;
 import simulation.Address;
 
 public class Ambulance extends MedicalUnit {
@@ -14,5 +15,6 @@ public class Ambulance extends MedicalUnit {
 	public void cycleStep() {
 
 	}
-
+	
+	
 }

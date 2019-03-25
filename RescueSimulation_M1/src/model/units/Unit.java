@@ -91,14 +91,15 @@ public abstract class Unit implements Simulatable {
 }
 	
 	public void treat() {
-		
+		this.target.getDisaster().setActive(false);
 	}
 	
 	public void jobsDone() {
-		if(this.getState().equals(UnitState.TREATING)) {
+		
 			this.setState(UnitState.IDLE);
+			this.target =null;
 			
-		}
+		
 		
 	}
 
