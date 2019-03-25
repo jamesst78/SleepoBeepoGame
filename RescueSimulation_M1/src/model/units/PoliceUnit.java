@@ -145,7 +145,7 @@ public abstract class PoliceUnit extends Unit {
 		ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
 		
 		if(!x.getOccupants().isEmpty()) {
-			for(int i = 0 ; i<x.getOccupants().size() ; i++) {
+		for(int i = 0 ; i<x.getOccupants().size() && this.passengers.size()<this.maxCapacity ; i++) {
 				if(!x.getOccupants().get(i).getState().equals(CitizenState.DECEASED)) {
 					passengers.add(x.getOccupants().get(i));  //7ateeto fl 3rbya
 					x.getOccupants().remove(i);    //removed mn el occupants

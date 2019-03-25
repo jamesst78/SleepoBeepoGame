@@ -26,6 +26,7 @@ public class GasControlUnit extends FireUnit {
 			if(!x.getOccupants().get(i).getState().equals(CitizenState.DECEASED)) {
 				AllDead = false;
 			}
+			
 			if(AllDead) {
 				this.jobsDone();
 				return;
