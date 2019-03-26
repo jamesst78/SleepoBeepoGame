@@ -385,5 +385,22 @@ public class Simulator implements WorldListener {
 		}
 	}
 	
+	public void checkExecutedDisasters() {
+		for(int i = 0; i < this.executedDisasters.size();i++) {
+			if(this.executedDisasters.get(i).isActive()== true) {
+				this.executedDisasters.get(i).cycleStep();
+			}
+		}
+	}
+	
+	public void BuildsAndCitz() {
+		for(int i = 0; i < this.buildings.size(); i++) {
+			this.buildings.get(i).cycleStep();
+		}
+		for(int j = 0; j < this.citizens.size();j++) {
+			this.citizens.get(j).cycleStep();
+		}
+	}
+	
 	
 }
