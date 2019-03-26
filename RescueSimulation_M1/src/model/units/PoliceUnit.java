@@ -42,7 +42,7 @@ public abstract class PoliceUnit extends Unit {
 		
 		if(this.getState().equals(UnitState.RESPONDING)) {
 			for(int i = 0 ; i<x.getOccupants().size() ; i++) {
-				if(!x.getOccupants().get(i).getState().equals(CitizenState.DECEASED)) {
+				if(!(x.getOccupants().get(i).getState().equals(CitizenState.DECEASED))) {
 					break;
 				}
 				else {
@@ -140,7 +140,6 @@ public abstract class PoliceUnit extends Unit {
 
 	
 	public void treat() {
-		
 		if(this.getTarget() instanceof ResidentialBuilding) {
 			
 		ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
@@ -159,10 +158,6 @@ public abstract class PoliceUnit extends Unit {
 				
 			
 		}
-	}
-
-	public ArrayList<Citizen> getPassengers() {
-		return passengers;
 	}
 
 }
