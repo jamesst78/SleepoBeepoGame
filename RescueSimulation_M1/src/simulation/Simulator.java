@@ -292,6 +292,7 @@ public class Simulator implements WorldListener {
 	
 	public void nextCycle() {
 		//hn3ml planned disasters
+		//hn3ml Units
 	
 	}
 	
@@ -372,6 +373,15 @@ public class Simulator implements WorldListener {
 				this.buildings.get(j).struckBy(f);
 				this.executedDisasters.add(f);
 			}
+		}
+	}
+	
+	public void checkUnits() {
+		//go over the emergencyUnits Array and see which is responding to call the unit's cycleStep()
+		//Do I have to consider respond(rescuable r)?? la2a 3ashan el user howa elly bey-dispatch el units...baleez
+		for(int i = 0; i < this.emergencyUnits.size();i++) {
+			if(this.emergencyUnits.get(i).getState().equals(UnitState.RESPONDING) || this.emergencyUnits.get(i).getState().equals(UnitState.TREATING))
+				this.emergencyUnits.get(i).cycleStep();
 		}
 	}
 	
