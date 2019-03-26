@@ -17,4 +17,6 @@ public class Ambulance extends MedicalUnit {
 	}
 	
 	
+	
+	
 }

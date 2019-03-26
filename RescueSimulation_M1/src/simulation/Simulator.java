@@ -254,6 +254,7 @@ public class Simulator implements WorldListener {
 		if(!(this.plannedDisasters.isEmpty()))
 			gameOver1 = true;
 		for(int i = 0; i < this.citizens.size(); i++) {
+			if(this.citizens.get(i).getDisaster()!=null)
 			if(!(citizens.get(i).getState().equals(CitizenState.DECEASED)) && citizens.get(i).getDisaster().isActive()==true) {
 				gameOver2Citz = false;
 				break;
@@ -261,6 +262,7 @@ public class Simulator implements WorldListener {
 			}
 		}
 		for(int j = 0; j < this.buildings.size() ; j++) {
+			if(this.buildings.get(j).getDisaster()!= null)
 			if(buildings.get(j).getDisaster().isActive() == true) {
 				gameOver2Builds = false;
 				break;
@@ -301,13 +303,14 @@ public class Simulator implements WorldListener {
 	
 	public void checkDisasters() {
 		for(int i = 0 ; i<plannedDisasters.size() ; i++) {
-			ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
-			Citizen c = (Citizen)this.plannedDisasters.get(i).getTarget();
+			
+			
 		if(this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
 			Disaster d = (Disaster)this.plannedDisasters.get(i);
 			
 			
 			if(this.plannedDisasters.get(i) instanceof Fire ) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
 				if(x.getDisaster()!= null) {
 					x.getDisaster().setActive(false);
 				}
@@ -319,7 +322,7 @@ public class Simulator implements WorldListener {
 					x.struckBy(d);
 					this.executedDisasters.add(d);
 					this.plannedDisasters.remove(i);
-					i--;
+					
 					
 				}
 				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
@@ -329,19 +332,20 @@ public class Simulator implements WorldListener {
 					executedDisasters.add(k);
 					this.plannedDisasters.remove(i);
 					//don't forget to -- the i
-					i--;
+					
 					
 				}
 				if(x.getGasLevel()>=70) {
 					x.setStructuralIntegrity(0);
 					this.plannedDisasters.remove(i);
 					//don't forget to -- the i
-					i--;
+					
 				}
 				
 			}
 			
 			if(d instanceof GasLeak) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
 				if(x.getDisaster() instanceof Fire) {
 					//DONT FORGET TO DEACTIVE IF NOT NULL
 					
@@ -351,17 +355,27 @@ public class Simulator implements WorldListener {
 					executedDisasters.add(k2);
 					plannedDisasters.remove(i);
 					//-- the i
-					i--;
+					
 					
 				}
 				
 			}
-			
+			if(this.plannedDisasters.get(i).getTarget() instanceof ResidentialBuilding) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
 			x.struckBy(d);
 			this.plannedDisasters.remove(i);
-			i--;
+			
 			//-- the i
 			this.executedDisasters.add(d);
+			}
+			if(this.plannedDisasters.get(i).getTarget() instanceof Citizen) {
+				Citizen c = (Citizen)this.plannedDisasters.get(i).getTarget();
+				c.struckBy(d);
+				this.plannedDisasters.remove(i);
+				
+				//-- the i
+				this.executedDisasters.add(d);
+			}
 			 
 		}
 		}

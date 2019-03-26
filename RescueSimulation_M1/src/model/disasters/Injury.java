@@ -14,4 +14,13 @@ public void cycleStep() {
 	c.setBloodLoss(c.getBloodLoss()+10);
 	}
 
+
+public void strike() {
+	this.setActive(true);
+	if(this.getTarget() instanceof Citizen) {
+		Citizen c = (Citizen)this.getTarget();
+		c.setBloodLoss(c.getBloodLoss()+30);
+	}
+}
+
 }

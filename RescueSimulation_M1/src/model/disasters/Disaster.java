@@ -40,11 +40,27 @@ public abstract class Disaster implements Simulatable {
 	
 	public void strike() {
 		this.setActive(true);
-		ResidentialBuilding b = (ResidentialBuilding)this.getTarget();
+		
+		if(this.getTarget() instanceof Citizen) {
 		Citizen c = (Citizen)this.getTarget();
-		if(this.target instanceof Citizen) {
+			
+		
 			c.setState(CitizenState.IN_TROUBLE);
+			
+			if(this instanceof Infection) {
+				c.setToxicity(c.getToxicity()+25);
+		
+	}
+			//if(this instanceof Injury) {
+			//c.setBloodLoss(c.getBloodLoss()+30);
+		
+	//}
 		}
+		
+		
+		if(this.getTarget() instanceof ResidentialBuilding){
+			ResidentialBuilding b = (ResidentialBuilding)this.getTarget();
+			
 		
 		if(this instanceof Collapse) {
 			b.setFoundationDamage(b.getFoundationDamage()+10);
@@ -59,14 +75,8 @@ public abstract class Disaster implements Simulatable {
 			b.setGasLevel(b.getGasLevel()+10);
 	
 }
-		if(this instanceof Infection) {
-			c.setToxicity(c.getToxicity()+25);
-	
-}
-		if(this instanceof Injury) {
-			c.setBloodLoss(c.getBloodLoss()+30);
-	
-}
+
+		}
 
 	}
 	
