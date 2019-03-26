@@ -140,6 +140,7 @@ public abstract class PoliceUnit extends Unit {
 
 	
 	public void treat() {
+		
 		if(this.getTarget() instanceof ResidentialBuilding) {
 			
 		ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
@@ -158,6 +159,10 @@ public abstract class PoliceUnit extends Unit {
 				
 			
 		}
+	}
+
+	public ArrayList<Citizen> getPassengers() {
+		return passengers;
 	}
 
 }

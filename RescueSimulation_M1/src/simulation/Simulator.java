@@ -69,10 +69,10 @@ public class Simulator implements WorldListener {
 	}
 
 	private void loadUnits(String path) throws Exception {
-		WorldListener worldListener;
+		
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		String line = br.readLine();
-		ArrayList <WorldListener> ListOfListeners= new ArrayList<>();
+		
 			
 
 		while (line != null) {
@@ -278,7 +278,7 @@ public class Simulator implements WorldListener {
 	}
 	
 	
-	public int calculateCasualities() {
+	public int calculateCasualties() {
 		int r = 0;
 		for(int u = 0; u < this.citizens.size(); u++) {
 			if(citizens.get(u).getState().equals(CitizenState.DECEASED)) {
@@ -291,8 +291,10 @@ public class Simulator implements WorldListener {
 	
 	
 	public void nextCycle() {
-		//hn3ml planned disasters
-		//hn3ml Units
+		this.checkDisasters();
+		this.checkUnits();
+		this.checkExecutedDisasters();
+		this.BuildsAndCitz();
 	
 	}
 	
