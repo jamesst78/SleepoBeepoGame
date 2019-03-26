@@ -292,48 +292,7 @@ public class Simulator implements WorldListener {
 	
 	public void nextCycle() {
 		//hn3ml planned disasters
-		
-		for(int i = 0 ; i<plannedDisasters.size() ; i++) {
-			ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
-			Citizen c = (Citizen)this.plannedDisasters.get(i).getTarget();
-		if(this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
-			Disaster d = (Disaster)this.plannedDisasters.get(i);
-			Rescuable r = this.plannedDisasters.get(i).getTarget();
-			if(this.plannedDisasters.get(i) instanceof Fire ) {
-				
-				x.cycleStep();
-				if(x.getGasLevel() == 0) {
-					x.struckBy(d);
-					this.executedDisasters.add(d);
-					this.plannedDisasters.remove(i);
-					
-				}
-				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
-					Collapse k = new Collapse(this.currentCycle,x);
-					x.struckBy(k);
-					executedDisasters.add(k);
-					this.plannedDisasters.remove(i);
-					
-				}
-				if(x.getGasLevel()>=70) {
-					x.setStructuralIntegrity(0);
-				}
-				
-			}
-			
-			if(d instanceof GasLeak) {
-				if(x.getDisaster() instanceof Fire) {
-					x.cycleStep();
-					Collapse k2 = new Collapse(this.currentCycle,x);
-					x.struckBy(k2);
-					executedDisasters.add(k2);
-					plannedDisasters.remove(i);
-					
-				}
-			}
-			 
-		}
-		}
+	
 	}
 	
 	
@@ -343,38 +302,52 @@ public class Simulator implements WorldListener {
 			Citizen c = (Citizen)this.plannedDisasters.get(i).getTarget();
 		if(this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
 			Disaster d = (Disaster)this.plannedDisasters.get(i);
-			Rescuable r = this.plannedDisasters.get(i).getTarget();
+			
 			if(this.plannedDisasters.get(i) instanceof Fire ) {
+				//LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new one. or if the disaster was null , 5osh 3latool
 				
-				x.cycleStep();
 				if(x.getGasLevel() == 0) {
+					
 					x.struckBy(d);
 					this.executedDisasters.add(d);
 					this.plannedDisasters.remove(i);
+					//dont forget to -- the i
 					
 				}
 				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
 					Collapse k = new Collapse(this.currentCycle,x);
 					x.struckBy(k);
+					x.setFireDamage(0);
 					executedDisasters.add(k);
 					this.plannedDisasters.remove(i);
+					//don't forget to -- the i
 					
 				}
 				if(x.getGasLevel()>=70) {
 					x.setStructuralIntegrity(0);
+					x.getDisaster().setActive(false);
+					this.plannedDisasters.remove(i);
+					//don't forget to -- the i
 				}
 				
 			}
 			
 			if(d instanceof GasLeak) {
 				if(x.getDisaster() instanceof Fire) {
-					x.cycleStep();
+					//DONT FORGET TO DEACTIVE IF NOT NULL
+					
 					Collapse k2 = new Collapse(this.currentCycle,x);
 					x.struckBy(k2);
+					x.setFireDamage(0);
 					executedDisasters.add(k2);
 					plannedDisasters.remove(i);
+					//-- the i
 					
 				}
+				x.struckBy(d);
+				this.plannedDisasters.remove(i);
+				//-- the i
+				this.executedDisasters.add(d);
 			}
 			 
 		}
