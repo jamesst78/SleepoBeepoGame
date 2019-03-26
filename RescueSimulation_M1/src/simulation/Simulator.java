@@ -303,15 +303,20 @@ public class Simulator implements WorldListener {
 		if(this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
 			Disaster d = (Disaster)this.plannedDisasters.get(i);
 			
+			
 			if(this.plannedDisasters.get(i) instanceof Fire ) {
+				if(x.getDisaster()!= null) {
+					x.getDisaster().setActive(false);
+				}
 				//LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new one. or if the disaster was null , 5osh 3latool
+				
 				
 				if(x.getGasLevel() == 0) {
 					
 					x.struckBy(d);
 					this.executedDisasters.add(d);
 					this.plannedDisasters.remove(i);
-					//dont forget to -- the i
+					i--;
 					
 				}
 				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
@@ -321,13 +326,14 @@ public class Simulator implements WorldListener {
 					executedDisasters.add(k);
 					this.plannedDisasters.remove(i);
 					//don't forget to -- the i
+					i--;
 					
 				}
 				if(x.getGasLevel()>=70) {
 					x.setStructuralIntegrity(0);
-					x.getDisaster().setActive(false);
 					this.plannedDisasters.remove(i);
 					//don't forget to -- the i
+					i--;
 				}
 				
 			}
@@ -342,13 +348,17 @@ public class Simulator implements WorldListener {
 					executedDisasters.add(k2);
 					plannedDisasters.remove(i);
 					//-- the i
+					i--;
 					
 				}
-				x.struckBy(d);
-				this.plannedDisasters.remove(i);
-				//-- the i
-				this.executedDisasters.add(d);
+				
 			}
+			
+			x.struckBy(d);
+			this.plannedDisasters.remove(i);
+			i--;
+			//-- the i
+			this.executedDisasters.add(d);
 			 
 		}
 		}
@@ -356,6 +366,9 @@ public class Simulator implements WorldListener {
 		for(int j = 0 ; j<buildings.size() ; j++) {
 			if(this.buildings.get(j).getFireDamage() == 100) {
 				Collapse f = new Collapse(this.currentCycle,this.buildings.get(j));
+				if(this.buildings.get(j).getDisaster() != null) {
+					this.buildings.get(j).getDisaster().setActive(false);
+				}
 				this.buildings.get(j).struckBy(f);
 				this.executedDisasters.add(f);
 			}
