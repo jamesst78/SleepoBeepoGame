@@ -33,6 +33,7 @@ public abstract class MedicalUnit extends Unit {
 			x.setState(CitizenState.RESCUED);
 			this.heal();
 			
+			
 		}
 		
 		if(this instanceof DiseaseControlUnit) {
@@ -56,6 +57,7 @@ public abstract class MedicalUnit extends Unit {
 				x.setHp(x.getHp() + this.healingAmount);
 			}
 			else {
+				
 				this.jobsDone();
 			}
 	}

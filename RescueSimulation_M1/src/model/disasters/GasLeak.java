@@ -10,7 +10,8 @@ public class GasLeak extends Disaster {
 
 	}
 public void cycleStep() {
-		
+	ResidentialBuilding b = (ResidentialBuilding)this.getTarget();
+	b.setGasLevel(b.getGasLevel()+ 15);
 	}
 
 }

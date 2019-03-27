@@ -4,20 +4,24 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import model.disasters.Collapse;
 import model.disasters.Disaster;
 import model.disasters.Fire;
 import model.disasters.GasLeak;
 import model.disasters.Infection;
 import model.disasters.Injury;
+import model.events.SOSListener;
 import model.events.WorldListener;
 import model.infrastructure.ResidentialBuilding;
 import model.people.Citizen;
+import model.people.CitizenState;
 import model.units.Ambulance;
 import model.units.DiseaseControlUnit;
 import model.units.Evacuator;
 import model.units.FireTruck;
 import model.units.GasControlUnit;
 import model.units.Unit;
+import model.units.UnitState;
 
 public class Simulator implements WorldListener {
 
@@ -28,15 +32,17 @@ public class Simulator implements WorldListener {
 	private ArrayList<Disaster> plannedDisasters;
 	private ArrayList<Disaster> executedDisasters;
 	private Address[][] world;
+	private SOSListener emergencyService;
 
-	public Simulator() throws Exception {
+	public Simulator(SOSListener emergencyService) throws Exception {
 
 		buildings = new ArrayList<ResidentialBuilding>();
 		citizens = new ArrayList<Citizen>();
 		emergencyUnits = new ArrayList<Unit>();
 		plannedDisasters = new ArrayList<Disaster>();
 		executedDisasters = new ArrayList<Disaster>();
-
+		this.emergencyService =emergencyService;
+		this.currentCycle =0;
 		world = new Address[10][10];
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -63,10 +69,10 @@ public class Simulator implements WorldListener {
 	}
 
 	private void loadUnits(String path) throws Exception {
-		WorldListener worldListener;
+		
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		String line = br.readLine();
-		ArrayList <WorldListener> ListOfListeners= new ArrayList<>();
+		
 			
 
 		while (line != null) {
@@ -80,24 +86,24 @@ public class Simulator implements WorldListener {
 
 			case "AMB":
 				
-				emergencyUnits.add(new Ambulance(id, world[0][0], steps));
+				emergencyUnits.add(new Ambulance(id, world[0][0], steps,this));
 				break;
 
 			case "DCU":
 				
-				emergencyUnits.add(new DiseaseControlUnit(id, world[0][0], steps));
+				emergencyUnits.add(new DiseaseControlUnit(id, world[0][0], steps,this));
 				break;
 
 			case "EVC":
-				emergencyUnits.add(new Evacuator(id, world[0][0], steps, Integer.parseInt(info[3])));
+				emergencyUnits.add(new Evacuator(id, world[0][0], steps, this,Integer.parseInt(info[3])));
 				break;
 
 			case "FTK":
-				emergencyUnits.add(new FireTruck(id, world[0][0], steps));
+				emergencyUnits.add(new FireTruck(id, world[0][0], steps,this));
 				break;
 
 			case "GCU":
-				emergencyUnits.add(new GasControlUnit(id, world[0][0], steps));
+				emergencyUnits.add(new GasControlUnit(id, world[0][0], steps,this));
 				break;
 
 			}
@@ -118,8 +124,9 @@ public class Simulator implements WorldListener {
 			String[] info = line.split(",");
 			int x = Integer.parseInt(info[0]);
 			int y = Integer.parseInt(info[1]);
-
-			buildings.add(new ResidentialBuilding(world[x][y]));
+			ResidentialBuilding b = new ResidentialBuilding(world[x][y]);
+			buildings.add(b);
+			b.setEmergencyService(emergencyService);
 
 			line = br.readLine();
 
@@ -140,8 +147,9 @@ public class Simulator implements WorldListener {
 			String id = info[2];
 			String name = info[3];
 			int age = Integer.parseInt(info[4]);
-
-			citizens.add(new Citizen(world[x][y], id, name, age));
+			Citizen z = new Citizen(world[x][y], id, name, age,this);
+			citizens.add(z);
+			z.setEmergencyService(emergencyService);
 
 			line = br.readLine();
 
@@ -228,7 +236,187 @@ public class Simulator implements WorldListener {
 			}
 		
 	}
+
+	public ArrayList<Unit> getEmergencyUnits() {
+		return emergencyUnits;
+	}
+
+	public void setEmergencyService(SOSListener emergencyService) {
+		this.emergencyService = emergencyService;
+	}
 	
+	public boolean checkGameOver() {
+		boolean gameOver1 = false;
+		boolean gameOver2Citz = true;
+		boolean gameOver3 = true;
+		boolean gameOver2Builds = true;
+		
+		if(!(this.plannedDisasters.isEmpty()))
+			gameOver1 = true;
+		for(int i = 0; i < this.citizens.size(); i++) {
+			if(this.citizens.get(i).getDisaster()!=null)
+			if(!(citizens.get(i).getState().equals(CitizenState.DECEASED)) && citizens.get(i).getDisaster().isActive()==true) {
+				gameOver2Citz = false;
+				break;
+				
+			}
+		}
+		for(int j = 0; j < this.buildings.size() ; j++) {
+			if(this.buildings.get(j).getDisaster()!= null)
+			if(buildings.get(j).getDisaster().isActive() == true) {
+				gameOver2Builds = false;
+				break;
+			}
+		}
+			
+			for(int z = 0 ; z<emergencyUnits.size();z++) {
+				if(!emergencyUnits.get(z).getState().equals(UnitState.IDLE)) {
+					gameOver3=false;
+				}
+			}
+			
+		
+		return(gameOver1 & gameOver2Citz & gameOver3 & gameOver2Builds);
+	}
+	
+	
+	public int calculateCasualties() {
+		int r = 0;
+		for(int u = 0; u < this.citizens.size(); u++) {
+			if(citizens.get(u).getState().equals(CitizenState.DECEASED)) {
+				r = r + 1;
+			}
+		}
+		return r;
+	}
+	
+	
+	
+	public void nextCycle() {
+		this.checkDisasters();
+		this.checkUnits();
+		this.checkExecutedDisasters();
+		this.BuildsAndCitz();
+	
+	}
+	
+	
+	public void checkDisasters() {
+		for(int i = 0 ; i<plannedDisasters.size() ; i++) {
+			
+			
+		if(this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
+			Disaster d = (Disaster)this.plannedDisasters.get(i);
+			
+			
+			if(this.plannedDisasters.get(i) instanceof Fire ) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
+				if(x.getDisaster()!= null) {
+					x.getDisaster().setActive(false);
+				}
+				//LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new one. or if the disaster was null , 5osh 3latool
+				
+				
+				if(x.getGasLevel() == 0) {
+					
+					x.struckBy(d);
+					this.executedDisasters.add(d);
+					this.plannedDisasters.remove(i);
+					
+					
+				}
+				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
+					Collapse k = new Collapse(this.currentCycle,x);
+					x.struckBy(k);
+					x.setFireDamage(0);
+					executedDisasters.add(k);
+					this.plannedDisasters.remove(i);
+					//don't forget to -- the i
+					
+					
+				}
+				if(x.getGasLevel()>=70) {
+					x.setStructuralIntegrity(0);
+					this.plannedDisasters.remove(i);
+					//don't forget to -- the i
+					
+				}
+				
+			}
+			
+			if(d instanceof GasLeak) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
+				if(x.getDisaster() instanceof Fire) {
+					//DONT FORGET TO DEACTIVE IF NOT NULL
+					
+					Collapse k2 = new Collapse(this.currentCycle,x);
+					x.struckBy(k2);
+					x.setFireDamage(0);
+					executedDisasters.add(k2);
+					plannedDisasters.remove(i);
+					//-- the i
+					
+					
+				}
+				
+			}
+			if(this.plannedDisasters.get(i).getTarget() instanceof ResidentialBuilding) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
+			x.struckBy(d);
+			this.plannedDisasters.remove(i);
+			
+			//-- the i
+			this.executedDisasters.add(d);
+			}
+			if(this.plannedDisasters.get(i).getTarget() instanceof Citizen) {
+				Citizen c = (Citizen)this.plannedDisasters.get(i).getTarget();
+				c.struckBy(d);
+				this.plannedDisasters.remove(i);
+				
+				//-- the i
+				this.executedDisasters.add(d);
+			}
+			 
+		}
+		}
+		
+		for(int j = 0 ; j<buildings.size() ; j++) {
+			if(this.buildings.get(j).getFireDamage() == 100) {
+				Collapse f = new Collapse(this.currentCycle,this.buildings.get(j));
+				if(this.buildings.get(j).getDisaster() != null) {
+					this.buildings.get(j).getDisaster().setActive(false);
+				}
+				this.buildings.get(j).struckBy(f);
+				this.executedDisasters.add(f);
+			}
+		}
+	}
+	
+	public void checkUnits() {
+		//go over the emergencyUnits Array and see which is responding to call the unit's cycleStep()
+		//Do I have to consider respond(rescuable r)?? la2a 3ashan el user howa elly bey-dispatch el units...baleez
+		for(int i = 0; i < this.emergencyUnits.size();i++) {
+			if(this.emergencyUnits.get(i).getState().equals(UnitState.RESPONDING) || this.emergencyUnits.get(i).getState().equals(UnitState.TREATING))
+				this.emergencyUnits.get(i).cycleStep();
+		}
+	}
+	
+	public void checkExecutedDisasters() {
+		for(int i = 0; i < this.executedDisasters.size();i++) {
+			if(this.executedDisasters.get(i).isActive()== true) {
+				this.executedDisasters.get(i).cycleStep();
+			}
+		}
+	}
+	
+	public void BuildsAndCitz() {
+		for(int i = 0; i < this.buildings.size(); i++) {
+			this.buildings.get(i).cycleStep();
+		}
+		for(int j = 0; j < this.citizens.size();j++) {
+			this.citizens.get(j).cycleStep();
+		}
+	}
 	
 	
 }

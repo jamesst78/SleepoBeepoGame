@@ -6,6 +6,7 @@ import java.util.Random;
 import model.disasters.Disaster;
 import model.events.SOSListener;
 import model.people.Citizen;
+import model.people.CitizenState;
 import simulation.Address;
 import simulation.Rescuable;
 import simulation.Simulatable;
@@ -133,6 +134,18 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 	
 	public void treat() {
 		
+	}
+
+	public void struckBy(Disaster d) {
+		this.disaster = d;
+		this.disaster.strike();
+		emergencyService.receiveSOSCall(this);
+	}
+	
+	public void killAll() {
+		for(int i = 0; i < this.occupants.size(); i++) {
+			this.occupants.get(i).setState(CitizenState.DECEASED);
+		}
 	}
 
 

@@ -20,7 +20,7 @@ public class Citizen implements Rescuable, Simulatable {
 	private Address location;
 	private SOSListener emergencyService;
 	private WorldListener worldListener;
-	public Citizen(Address location, String nationalID, String name, int age) {
+	public Citizen(Address location, String nationalID, String name, int age, WorldListener wordListener) {
 
 		this.name = name;
 		this.nationalID = nationalID;
@@ -53,15 +53,16 @@ public class Citizen implements Rescuable, Simulatable {
 
 	public void setHp(int hp) {
 		
-		if(hp >=100)
+		if(hp >100)
 			this.hp = 100;
-		if(hp<=0)
+		else
+		if(hp<0)
 			this.hp = 0;
 		else
 			this.hp = hp;
 		
 		if(this.hp == 0)
-			this.setState(this.state.DECEASED);
+			this.setState(CitizenState.DECEASED);
 	}
 
 	public int getBloodLoss() {
@@ -69,15 +70,16 @@ public class Citizen implements Rescuable, Simulatable {
 	}
 
 	public void setBloodLoss(int bloodLoss) {
-		if(bloodLoss>=100) {
+		if(bloodLoss>100) {
 			this.bloodLoss = 100;
 		}
-		if(bloodLoss<=0)
+		else
+		if(bloodLoss<0)
 			this.bloodLoss = 0;
 		else
 		this.bloodLoss = bloodLoss;
 		
-		if(bloodLoss ==100) {
+		if(this.bloodLoss ==100) {
 			this.setHp(0);
 			
 		}
@@ -88,9 +90,10 @@ public class Citizen implements Rescuable, Simulatable {
 	}
 
 	public void setToxicity(int toxicity) {
-		if(this.toxicity>=100)
+		if(this.toxicity>100)
 			this.toxicity = 100;
-		if(this.toxicity <=0)
+		else
+		if(this.toxicity <0)
 			this.toxicity = 0;
 		else
 			this.toxicity = toxicity;
@@ -143,6 +146,12 @@ public class Citizen implements Rescuable, Simulatable {
 	
 	public void treat() {
 		
+	}
+	public void struckBy(Disaster d) {
+		this.disaster = d;
+		this.disaster.strike();
+		if(emergencyService != null)
+		emergencyService.receiveSOSCall(this);
 	}
 	
 	
