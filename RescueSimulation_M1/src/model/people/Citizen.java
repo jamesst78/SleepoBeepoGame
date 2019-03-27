@@ -144,14 +144,18 @@ public class Citizen implements Rescuable, Simulatable {
 		this.emergencyService = emergencyService;
 	}
 	
-	public void treat() {
-		
-	}
+	
 	public void struckBy(Disaster d) {
 		this.disaster = d;
-		this.disaster.strike();
+		this.disaster.setActive(true);
 		if(emergencyService != null)
 		emergencyService.receiveSOSCall(this);
+	}
+
+	@Override
+	public void treat() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

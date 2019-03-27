@@ -75,37 +75,45 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	
 	public void cycleStep() {
 		
-		
 	
-	
-	
-	if(this.getState() == UnitState.TREATING) {
-		this.getTarget().treat();
-		
-		
+	if(this.getState() .equals(UnitState.TREATING) ) {
+		this.treat();		
 	}
-	if(this.getState() == UnitState.RESPONDING) {
+	if(this.getState() .equals(UnitState.RESPONDING)) {
 		Address Targetloc = this.getTarget().getLocation();
-		int distance = Targetloc.getX() + Targetloc.getY();
+		int x1 = Targetloc.getX();
+		int y1 = Targetloc.getY();
+		int x2 = this.getLocation().getX();
+		int y2 = this.getLocation().getY();
+		int distance;
+		int x = x1-x2;
+		if(x<0) {
+			x = x*-1;
+		}
+		int y = y1-y2;
+		if(y<0) {
+			y = y*-1;
+		}
+		distance = x+y;	
 		distance= distance-this.getStepsPerCycle();
 		this.setDistanceToTarget(distance);
-		if(distance <=0) {
+		if(distance<=0) {
 			this.setLocation(Targetloc);
 			this.setState(UnitState.TREATING);
+			this.treat();
+			
 			
 		}
 	}
 }
 	
 	public void treat() {
-		this.target.getDisaster().setActive(false);
+		
 	}
 	
 	public void jobsDone() {
-		
-			this.setState(UnitState.IDLE);
-			this.target =null;
-		
+		this.setState(UnitState.IDLE);
+		this.target = null;
 	}
 	
 	public void respond(Rescuable r) {

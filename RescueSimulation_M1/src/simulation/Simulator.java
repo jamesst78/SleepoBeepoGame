@@ -293,10 +293,13 @@ public class Simulator implements WorldListener {
 	
 	
 	public void nextCycle() {
+		
 		this.checkDisasters();
 		this.checkUnits();
 		this.checkExecutedDisasters();
 		this.BuildsAndCitz();
+		if(!this.checkGameOver())
+		this.currentCycle++;
 	
 	}
 	
@@ -319,18 +322,20 @@ public class Simulator implements WorldListener {
 				
 				if(x.getGasLevel() == 0) {
 					
-					x.struckBy(d);
+					d.strike();
 					this.executedDisasters.add(d);
 					this.plannedDisasters.remove(i);
+					
 					
 					
 				}
 				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
 					Collapse k = new Collapse(this.currentCycle,x);
-					x.struckBy(k);
+					k.strike();
 					x.setFireDamage(0);
 					executedDisasters.add(k);
 					this.plannedDisasters.remove(i);
+					
 					//don't forget to -- the i
 					
 					
@@ -338,6 +343,7 @@ public class Simulator implements WorldListener {
 				if(x.getGasLevel()>=70) {
 					x.setStructuralIntegrity(0);
 					this.plannedDisasters.remove(i);
+					
 					//don't forget to -- the i
 					
 				}
@@ -350,10 +356,11 @@ public class Simulator implements WorldListener {
 					//DONT FORGET TO DEACTIVE IF NOT NULL
 					
 					Collapse k2 = new Collapse(this.currentCycle,x);
-					x.struckBy(k2);
+					k2.strike();
 					x.setFireDamage(0);
 					executedDisasters.add(k2);
 					plannedDisasters.remove(i);
+					
 					//-- the i
 					
 					
@@ -362,15 +369,16 @@ public class Simulator implements WorldListener {
 			}
 			if(this.plannedDisasters.get(i).getTarget() instanceof ResidentialBuilding) {
 				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
-			x.struckBy(d);
+			d.strike();
 			this.plannedDisasters.remove(i);
+			
 			
 			//-- the i
 			this.executedDisasters.add(d);
 			}
 			if(this.plannedDisasters.get(i).getTarget() instanceof Citizen) {
 				Citizen c = (Citizen)this.plannedDisasters.get(i).getTarget();
-				c.struckBy(d);
+				d.strike();
 				this.plannedDisasters.remove(i);
 				
 				//-- the i
@@ -396,7 +404,6 @@ public class Simulator implements WorldListener {
 		//go over the emergencyUnits Array and see which is responding to call the unit's cycleStep()
 		//Do I have to consider respond(rescuable r)?? la2a 3ashan el user howa elly bey-dispatch el units...baleez
 		for(int i = 0; i < this.emergencyUnits.size();i++) {
-			if(this.emergencyUnits.get(i).getState().equals(UnitState.RESPONDING) || this.emergencyUnits.get(i).getState().equals(UnitState.TREATING))
 				this.emergencyUnits.get(i).cycleStep();
 		}
 	}

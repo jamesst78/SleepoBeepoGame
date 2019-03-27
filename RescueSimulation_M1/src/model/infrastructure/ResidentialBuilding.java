@@ -58,6 +58,7 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 	public void setFireDamage(int fireDamage) {
 		if(fireDamage>=100)
 			this.fireDamage = 100;
+		else
 		if(fireDamage<=0)
 			this.fireDamage = 0;
 		else
@@ -73,6 +74,7 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 	public void setGasLevel(int gasLevel) {
 		if(gasLevel >= 100)
 			this.gasLevel = 100;
+		else
 		if(gasLevel<=0)
 			this.gasLevel = 0;
 	else	
@@ -138,7 +140,7 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 
 	public void struckBy(Disaster d) {
 		this.disaster = d;
-		this.disaster.strike();
+		this.disaster.setActive(true);
 		emergencyService.receiveSOSCall(this);
 	}
 	
