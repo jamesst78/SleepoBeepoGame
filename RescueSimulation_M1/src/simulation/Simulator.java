@@ -293,10 +293,15 @@ public class Simulator implements WorldListener {
 	
 	
 	public void nextCycle() {
+		
 		this.checkDisasters();
 		this.checkUnits();
 		this.checkExecutedDisasters();
 		this.BuildsAndCitz();
+<<<<<<< HEAD
+=======
+		if(!this.checkGameOver())
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 		this.currentCycle++;
 	
 	}
@@ -314,22 +319,46 @@ public class Simulator implements WorldListener {
 				}
 				//LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new one. or if the disaster was null , 5osh 3latoo
 				if(x.getGasLevel() == 0) {
+<<<<<<< HEAD
 					x.struckBy(d);
+=======
+					
+					d.strike();
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 					this.executedDisasters.add(d);
 					this.plannedDisasters.remove(i);
+<<<<<<< HEAD
+=======
+					
+					
+					
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 				}
 				
 				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
 					Collapse k = new Collapse(this.currentCycle,x);
-					x.struckBy(k);
+					k.strike();
 					x.setFireDamage(0);
 					executedDisasters.add(k);
 					this.plannedDisasters.remove(i);
+<<<<<<< HEAD
+=======
+					
+					//don't forget to -- the i
+					
+					
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 				}
 				
 				if(x.getGasLevel()>=70) {
 					x.setStructuralIntegrity(0);
 					this.plannedDisasters.remove(i);
+<<<<<<< HEAD
+=======
+					
+					//don't forget to -- the i
+					
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 				}
 				
 			}
@@ -341,23 +370,48 @@ public class Simulator implements WorldListener {
 					if(x.getDisaster()!= null)
 					x.getDisaster().setActive(false);
 					Collapse k2 = new Collapse(this.currentCycle,x);
-					x.struckBy(k2);
+					k2.strike();
 					x.setFireDamage(0);
 					executedDisasters.add(k2);
 					plannedDisasters.remove(i);
+<<<<<<< HEAD
+=======
+					
+					//-- the i
+					
+					
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 				}
 				
 			}
+<<<<<<< HEAD
 			if(d.getTarget() instanceof ResidentialBuilding) {
 				ResidentialBuilding x = (ResidentialBuilding)d.getTarget();
 			x.struckBy(d);
+=======
+			if(this.plannedDisasters.get(i).getTarget() instanceof ResidentialBuilding) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
+			d.strike();
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 			this.plannedDisasters.remove(i);
+<<<<<<< HEAD
+=======
+			
+			
+			//-- the i
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 			this.executedDisasters.add(d);
 			}
+<<<<<<< HEAD
 			
 			if(d.getTarget() instanceof Citizen) {
 				Citizen c = (Citizen)d.getTarget();
 				c.struckBy(d);
+=======
+			if(this.plannedDisasters.get(i).getTarget() instanceof Citizen) {
+				Citizen c = (Citizen)this.plannedDisasters.get(i).getTarget();
+				d.strike();
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 				this.plannedDisasters.remove(i);
 				this.executedDisasters.add(d);
 			}
@@ -386,7 +440,10 @@ public class Simulator implements WorldListener {
 		//go over the emergencyUnits Array and see which is responding to call the unit's cycleStep()
 		//Do I have to consider respond(rescuable r)?? la2a 3ashan el user howa elly bey-dispatch el units...baleez
 		for(int i = 0; i < this.emergencyUnits.size();i++) {
+<<<<<<< HEAD
 			
+=======
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 				this.emergencyUnits.get(i).cycleStep();
 		
 	}}

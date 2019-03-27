@@ -12,7 +12,12 @@ public class Ambulance extends MedicalUnit {
 
 	}
 	
+<<<<<<< HEAD
 
+=======
+	
+	
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 	
 	
 	

@@ -25,6 +25,7 @@ public abstract class MedicalUnit extends Unit {
 	Citizen x = (Citizen)this.getTarget();
 	x.getDisaster().setActive(false);
 	if(this instanceof Ambulance) {
+<<<<<<< HEAD
 		if(x.getBloodLoss()>0) {
 			x.setBloodLoss(x.getBloodLoss()-this.treatmentAmount);
 			}
@@ -37,6 +38,18 @@ public abstract class MedicalUnit extends Unit {
 	}
 			
 		
+=======
+		
+		if(x.getBloodLoss()<=0) {
+		x.setState(CitizenState.RESCUED);
+		this.heal();
+				
+		}
+		else {
+			x.setBloodLoss(x.getBloodLoss()-this.treatmentAmount);
+		}
+	}
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 		
 		if(this instanceof DiseaseControlUnit) {
 			if(x.getToxicity() >0) {
@@ -52,17 +65,28 @@ public abstract class MedicalUnit extends Unit {
 	}
 			
 	
+<<<<<<< HEAD
 	
+=======
+	}
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 	
 	public void heal() {
+<<<<<<< HEAD
 			this.setState(UnitState.IDLE);
+=======
+		
+		
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 			Citizen x = (Citizen)this.getTarget();
+			
 			if(x.getHp()<100) {
 				x.setHp(x.getHp() + this.healingAmount);
 			}
 			else {
 				x.setState(CitizenState.SAFE);
 				this.jobsDone();
+				
 			}
 	}
 	

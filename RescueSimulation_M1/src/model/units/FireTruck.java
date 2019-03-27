@@ -19,19 +19,20 @@ public class FireTruck extends FireUnit {
 				
 				if(x.getFireDamage()<=0) {
 					this.jobsDone();
-					return;
+					
 				}
 				if(x.getFireDamage()>=100) {
 					this.jobsDone();
-					return;
+					
 				}		
 				
 				int change = x.getFireDamage()-10;
 				x.setFireDamage(change);
 				
-				
-				
 			}
+				
+				
+			
 		
 	}
 

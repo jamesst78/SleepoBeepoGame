@@ -144,18 +144,28 @@ public class Citizen implements Rescuable, Simulatable {
 		this.emergencyService = emergencyService;
 	}
 	
+<<<<<<< HEAD
+=======
+	
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 	public void struckBy(Disaster d) {
 		this.disaster = d;
-		this.disaster.strike();
+		this.disaster.setActive(true);
 		if(emergencyService != null)
 		emergencyService.receiveSOSCall(this);
 	}
 
 	@Override
 	public void treat() {
+<<<<<<< HEAD
 	
 	}
 	
+=======
+		// TODO Auto-generated method stub
+		
+	}
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 	
 	
 }

@@ -58,6 +58,12 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 	public void setFireDamage(int fireDamage) {
 		if(fireDamage>=100)
 			this.fireDamage = 100;
+<<<<<<< HEAD
+=======
+		else
+		if(fireDamage<=0)
+			this.fireDamage = 0;
+>>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 		else
 			if(fireDamage<=0)
 				this.fireDamage = 0;
@@ -140,7 +146,7 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 
 	public void struckBy(Disaster d) {
 		this.disaster = d;
-		this.disaster.strike();
+		this.disaster.setActive(true);
 		emergencyService.receiveSOSCall(this);
 	}
 	
