@@ -75,17 +75,18 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	
 	public void cycleStep() {
 		
-		Address Targetloc = this.getTarget().getLocation();
-		int distance = Targetloc.getX() + Targetloc.getY();
+		
 	
 	
 	
 	if(this.getState() == UnitState.TREATING) {
 		this.getTarget().treat();
-		this.setState(UnitState.IDLE);
+		
 		
 	}
 	if(this.getState() == UnitState.RESPONDING) {
+		Address Targetloc = this.getTarget().getLocation();
+		int distance = Targetloc.getX() + Targetloc.getY();
 		distance= distance-this.getStepsPerCycle();
 		this.setDistanceToTarget(distance);
 		if(distance <=0) {
