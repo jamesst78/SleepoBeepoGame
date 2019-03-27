@@ -254,6 +254,7 @@ public class Simulator implements WorldListener {
 		if(!(this.plannedDisasters.isEmpty()))
 			gameOver1 = true;
 		for(int i = 0; i < this.citizens.size(); i++) {
+			if(this.citizens.get(i).getDisaster()!=null)
 			if(!(citizens.get(i).getState().equals(CitizenState.DECEASED)) && citizens.get(i).getDisaster().isActive()==true) {
 				gameOver2Citz = false;
 				break;
@@ -261,6 +262,7 @@ public class Simulator implements WorldListener {
 			}
 		}
 		for(int j = 0; j < this.buildings.size() ; j++) {
+			if(this.buildings.get(j).getDisaster()!= null)
 			if(buildings.get(j).getDisaster().isActive() == true) {
 				gameOver2Builds = false;
 				break;
@@ -295,73 +297,70 @@ public class Simulator implements WorldListener {
 		this.checkUnits();
 		this.checkExecutedDisasters();
 		this.BuildsAndCitz();
+		this.currentCycle++;
 	
 	}
 	
 	
 	public void checkDisasters() {
 		for(int i = 0 ; i<plannedDisasters.size() ; i++) {
-			ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
-			Citizen c = (Citizen)this.plannedDisasters.get(i).getTarget();
 		if(this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
 			Disaster d = (Disaster)this.plannedDisasters.get(i);
 			
-			
-			if(this.plannedDisasters.get(i) instanceof Fire ) {
+			if(d instanceof Fire ) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
 				if(x.getDisaster()!= null) {
 					x.getDisaster().setActive(false);
 				}
-				//LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new one. or if the disaster was null , 5osh 3latool
-				
-				
+				//LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new one. or if the disaster was null , 5osh 3latoo
 				if(x.getGasLevel() == 0) {
-					
 					x.struckBy(d);
 					this.executedDisasters.add(d);
 					this.plannedDisasters.remove(i);
-					i--;
-					
 				}
+				
 				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
 					Collapse k = new Collapse(this.currentCycle,x);
 					x.struckBy(k);
 					x.setFireDamage(0);
 					executedDisasters.add(k);
 					this.plannedDisasters.remove(i);
-					//don't forget to -- the i
-					i--;
-					
 				}
+				
 				if(x.getGasLevel()>=70) {
 					x.setStructuralIntegrity(0);
 					this.plannedDisasters.remove(i);
-					//don't forget to -- the i
-					i--;
 				}
 				
 			}
 			
 			if(d instanceof GasLeak) {
+				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
 				if(x.getDisaster() instanceof Fire) {
 					//DONT FORGET TO DEACTIVE IF NOT NULL
-					
+					if(x.getDisaster()!= null)
+					x.getDisaster().setActive(false);
 					Collapse k2 = new Collapse(this.currentCycle,x);
 					x.struckBy(k2);
 					x.setFireDamage(0);
 					executedDisasters.add(k2);
 					plannedDisasters.remove(i);
-					//-- the i
-					i--;
-					
 				}
 				
 			}
-			
+			if(d.getTarget() instanceof ResidentialBuilding) {
+				ResidentialBuilding x = (ResidentialBuilding)d.getTarget();
 			x.struckBy(d);
 			this.plannedDisasters.remove(i);
-			i--;
-			//-- the i
 			this.executedDisasters.add(d);
+			}
+			
+			if(d.getTarget() instanceof Citizen) {
+				Citizen c = (Citizen)d.getTarget();
+				c.struckBy(d);
+				this.plannedDisasters.remove(i);
+				this.executedDisasters.add(d);
+			}
 			 
 		}
 		}
@@ -376,16 +375,21 @@ public class Simulator implements WorldListener {
 				this.executedDisasters.add(f);
 			}
 		}
+		for(int k = 0; k < this.executedDisasters.size(); k++) {
+			if(this.executedDisasters.get(k).isActive()) {
+				this.executedDisasters.get(k).cycleStep();
+			}
+		}
 	}
 	
 	public void checkUnits() {
 		//go over the emergencyUnits Array and see which is responding to call the unit's cycleStep()
 		//Do I have to consider respond(rescuable r)?? la2a 3ashan el user howa elly bey-dispatch el units...baleez
 		for(int i = 0; i < this.emergencyUnits.size();i++) {
-			if(this.emergencyUnits.get(i).getState().equals(UnitState.RESPONDING) || this.emergencyUnits.get(i).getState().equals(UnitState.TREATING))
+			
 				this.emergencyUnits.get(i).cycleStep();
-		}
-	}
+		
+	}}
 	
 	public void checkExecutedDisasters() {
 		for(int i = 0; i < this.executedDisasters.size();i++) {

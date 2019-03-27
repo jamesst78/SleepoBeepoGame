@@ -58,11 +58,11 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 	public void setFireDamage(int fireDamage) {
 		if(fireDamage>=100)
 			this.fireDamage = 100;
-		if(fireDamage<=0)
-			this.fireDamage = 0;
 		else
-			
-		this.fireDamage = fireDamage;
+			if(fireDamage<=0)
+				this.fireDamage = 0;
+		else	
+			this.fireDamage = fireDamage;
 	}
 
 	public int getGasLevel() {
@@ -73,10 +73,12 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 	public void setGasLevel(int gasLevel) {
 		if(gasLevel >= 100)
 			this.gasLevel = 100;
+		else
 		if(gasLevel<=0)
 			this.gasLevel = 0;
-	else	
-		this.gasLevel = gasLevel;
+		else	
+			this.gasLevel = gasLevel;
+		
 		if(this.gasLevel == 100) {
 			for(int i = 0 ; i<this.occupants.size() ; i++) {
 				this.occupants.get(i).setHp(0);

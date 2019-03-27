@@ -1,7 +1,5 @@
 package model.units;
 
-import static org.junit.Assume.assumeNoException;
-
 import model.events.SOSResponder;
 import model.events.WorldListener;
 import model.infrastructure.ResidentialBuilding;
@@ -29,7 +27,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 		this.location = location;
 		this.stepsPerCycle = stepsPerCycle;
 		this.state = UnitState.IDLE;
-		
+		this.worldListener = worldListener;
 
 	}
 
@@ -74,19 +72,27 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	}
 	
 	public void cycleStep() {
+	if(this.getState().equals(UnitState.TREATING)) {
+		this.treat();
 		
-			Address Targetloc = this.getTarget().getLocation();
-	int distance = Targetloc.getX() + Targetloc.getY();
-	
-	
-	
-	if(this.getState() == UnitState.TREATING) {
-		this.getTarget().treat();
-		this.setState(UnitState.IDLE);
 		
 	}
 	if(this.getState() == UnitState.RESPONDING) {
-		distance= distance-this.getStepsPerCycle();
+		Address Targetloc = this.getTarget().getLocation();
+		int x1 = this.getLocation().getX();
+		int x2 = this.getTarget().getLocation().getX();
+		int y1 = this.getLocation().getY();
+		int y2 = this.getTarget().getLocation().getY();
+		int x = x1-x2;
+		if(x < 0) {
+			x = x *-1;
+		}
+		int y = y1 - y2;
+		if(y < 0) {
+			y = y * -1;
+		}
+		int distance = x + y;
+		distance = distance - this.getStepsPerCycle();
 		this.setDistanceToTarget(distance);
 		if(distance <=0) {
 			this.setLocation(Targetloc);
@@ -97,8 +103,9 @@ public abstract class Unit implements Simulatable, SOSResponder {
 }
 	
 	public void treat() {
-		this.target.getDisaster().setActive(false);
+		
 	}
+
 	
 	public void jobsDone() {
 		

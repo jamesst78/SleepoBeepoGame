@@ -14,4 +14,10 @@ public void cycleStep() {
 	b.setFireDamage(b.getFireDamage()+10);
 	}
 
+public void strike() {
+	this.setActive(true);
+	ResidentialBuilding b = (ResidentialBuilding)this.getTarget();
+	b.setFireDamage(b.getFireDamage()+10);
+}
+
 }

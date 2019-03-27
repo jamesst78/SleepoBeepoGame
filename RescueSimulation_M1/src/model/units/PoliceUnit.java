@@ -16,9 +16,9 @@ public abstract class PoliceUnit extends Unit {
 	private boolean ToGoBackToBuilding;
 	private boolean  ToGoBackToBase;
 
-	public PoliceUnit(String unitID, Address location, int stepsPerCycle, int maxCapacity , WorldListener toAdd) {
+	public PoliceUnit(String unitID, Address location, int stepsPerCycle,WorldListener worldListener, int maxCapacity ) {
 
-		super(unitID, location, stepsPerCycle, toAdd);
+		super(unitID, location, stepsPerCycle, worldListener);
 		passengers = new ArrayList<Citizen>();
 		this.maxCapacity = maxCapacity;
 

@@ -13,7 +13,7 @@ public class Collapse extends Disaster {
 	
 	public void cycleStep() {
 		ResidentialBuilding b = (ResidentialBuilding)this.getTarget();
-		b.setFoundationDamage(b.getFireDamage()+10);
+		b.setFoundationDamage(b.getFoundationDamage()+10);
 		
 		
 	}

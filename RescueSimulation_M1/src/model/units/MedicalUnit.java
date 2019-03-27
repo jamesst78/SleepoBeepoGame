@@ -22,18 +22,21 @@ public abstract class MedicalUnit extends Unit {
 		
 	
 	public void treat() {
-		Citizen x = (Citizen)this.getTarget();
-	this.getTarget().getDisaster().setActive(false);
+	Citizen x = (Citizen)this.getTarget();
+	x.getDisaster().setActive(false);
 	if(this instanceof Ambulance) {
-		
 		if(x.getBloodLoss()>0) {
-		x.setBloodLoss(x.getBloodLoss()-this.treatmentAmount);
-		}
-		else {
-			x.setState(CitizenState.RESCUED);
-			this.heal();
+			x.setBloodLoss(x.getBloodLoss()-this.treatmentAmount);
+			}
+			else {
+				x.setState(CitizenState.RESCUED);
+				this.heal();
+				
+			}
+		
+	}
 			
-		}
+		
 		
 		if(this instanceof DiseaseControlUnit) {
 			if(x.getToxicity() >0) {
@@ -45,19 +48,29 @@ public abstract class MedicalUnit extends Unit {
 				this.heal();
 			
 			}
-		}	
+		}
+	}
 			
-	}
-	}
+	
+	
 	
 	public void heal() {
+			this.setState(UnitState.IDLE);
 			Citizen x = (Citizen)this.getTarget();
 			if(x.getHp()<100) {
 				x.setHp(x.getHp() + this.healingAmount);
 			}
 			else {
+				x.setState(CitizenState.SAFE);
 				this.jobsDone();
 			}
 	}
+	
+	public void jobsDone() {
+		
+		this.setState(UnitState.IDLE);
+		this.getTarget().equals(null);
+	
+}
 
 }

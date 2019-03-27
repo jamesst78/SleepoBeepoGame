@@ -12,9 +12,9 @@ public class Ambulance extends MedicalUnit {
 
 	}
 	
-	public void cycleStep() {
 
-	}
+	
+	
 	
 	
 }
