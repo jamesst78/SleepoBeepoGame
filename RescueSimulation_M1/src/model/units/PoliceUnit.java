@@ -160,4 +160,8 @@ public abstract class PoliceUnit extends Unit {
 		}
 	}
 
+	public ArrayList<Citizen> getPassengers() {
+		return passengers;
+	}
+
 }
