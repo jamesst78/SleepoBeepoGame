@@ -72,21 +72,13 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	}
 	
 	public void cycleStep() {
-<<<<<<< HEAD
 	if(this.getState().equals(UnitState.TREATING)) {
 		this.treat();
 		
 		
-=======
-		
-	
-	if(this.getState() .equals(UnitState.TREATING) ) {
-		this.treat();		
->>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 	}
-	if(this.getState() .equals(UnitState.RESPONDING)) {
+	if(this.getState() == UnitState.RESPONDING) {
 		Address Targetloc = this.getTarget().getLocation();
-<<<<<<< HEAD
 		int x1 = this.getLocation().getX();
 		int x2 = this.getTarget().getLocation().getX();
 		int y1 = this.getLocation().getY();
@@ -101,29 +93,10 @@ public abstract class Unit implements Simulatable, SOSResponder {
 		}
 		int distance = x + y;
 		distance = distance - this.getStepsPerCycle();
-=======
-		int x1 = Targetloc.getX();
-		int y1 = Targetloc.getY();
-		int x2 = this.getLocation().getX();
-		int y2 = this.getLocation().getY();
-		int distance;
-		int x = x1-x2;
-		if(x<0) {
-			x = x*-1;
-		}
-		int y = y1-y2;
-		if(y<0) {
-			y = y*-1;
-		}
-		distance = x+y;	
-		distance= distance-this.getStepsPerCycle();
->>>>>>> branch 'master' of https://github.com/jamesst78/SleepoBeepoGame.git
 		this.setDistanceToTarget(distance);
-		if(distance<=0) {
+		if(distance <=0) {
 			this.setLocation(Targetloc);
 			this.setState(UnitState.TREATING);
-			this.treat();
-			
 			
 		}
 	}
@@ -135,8 +108,10 @@ public abstract class Unit implements Simulatable, SOSResponder {
 
 	
 	public void jobsDone() {
-		this.setState(UnitState.IDLE);
-		this.target = null;
+		
+			this.setState(UnitState.IDLE);
+			this.target =null;
+		
 	}
 	
 	public void respond(Rescuable r) {
