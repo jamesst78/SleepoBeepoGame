@@ -140,6 +140,7 @@ public class ResidentialBuilding implements Rescuable, Simulatable {
 
 	public void struckBy(Disaster d) {
 		this.disaster = d;
+
 		emergencyService.receiveSOSCall(this);
 	}
 	

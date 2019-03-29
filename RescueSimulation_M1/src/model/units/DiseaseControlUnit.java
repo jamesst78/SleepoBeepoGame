@@ -1,6 +1,8 @@
 package model.units;
 
 import model.events.WorldListener;
+import model.people.Citizen;
+import model.people.CitizenState;
 import simulation.Address;
 
 public class DiseaseControlUnit extends MedicalUnit {
@@ -9,6 +11,20 @@ public class DiseaseControlUnit extends MedicalUnit {
 
 		super(unitID, location, stepsPerCycle,worldListener);
 
+	}
+	
+	public void treat() {
+		Citizen x = (Citizen)this.getTarget();
+		x.getDisaster().setActive(false);
+		if(x.getToxicity() >0) {
+			x.setToxicity(x.getToxicity()-this.getTreatmentAmount());
+		
+		}
+		else {
+			x.setState(CitizenState.RESCUED);
+			this.heal();
+		
+		}
 	}
 
 }

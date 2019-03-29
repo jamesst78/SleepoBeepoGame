@@ -19,6 +19,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	private int distanceToTarget;
 	private int stepsPerCycle;
 	private WorldListener worldListener;
+	private boolean firstTimeSetting;
 	
 
 	public Unit(String unitID, Address location, int stepsPerCycle ,WorldListener worldListener) {
@@ -72,35 +73,31 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	}
 	
 	public void cycleStep() {
-	if(this.getState().equals(UnitState.TREATING)) {
-		this.treat();
+
+	
+	if(this.getState().equals(UnitState.RESPONDING) || this.getState().equals(UnitState.TREATING)){
 		
-		
-	}
-	if(this.getState() == UnitState.RESPONDING) {
-		Address Targetloc = this.getTarget().getLocation();
-		int x1 = this.getLocation().getX();
-		int x2 = this.getTarget().getLocation().getX();
-		int y1 = this.getLocation().getY();
-		int y2 = this.getTarget().getLocation().getY();
-		int x = x1-x2;
-		if(x < 0) {
-			x = x *-1;
-		}
-		int y = y1 - y2;
-		if(y < 0) {
-			y = y * -1;
-		}
-		int distance = x + y;
-		distance = distance - this.getStepsPerCycle();
-		this.setDistanceToTarget(distance);
-		if(distance <=0) {
-			this.setLocation(Targetloc);
+		if(this.distanceToTarget ==0) {
+			this.worldListener.assignAddress(this, this.getTarget().getLocation().getX(), this.getTarget().getLocation().getY());		
 			this.setState(UnitState.TREATING);
+			this.treat();
+			
 			
 		}
+		else {
+		if(this.distanceToTarget - this.getStepsPerCycle() <= 0) {	
+			this.setDistanceToTarget(0);				
+		}
+		else {
+			this.setDistanceToTarget(this.distanceToTarget - this.getStepsPerCycle());
+			
+		}
+		}
+		
+		
 	}
 }
+	
 	
 	public void treat() {
 		
