@@ -61,7 +61,7 @@ public class Citizen implements Rescuable, Simulatable {
 		else
 			this.hp = hp;
 		
-		if(this.hp == 0)
+		if(this.hp == 0) 
 			this.setState(CitizenState.DECEASED);
 	}
 
@@ -146,7 +146,6 @@ public class Citizen implements Rescuable, Simulatable {
 	
 	public void struckBy(Disaster d) {
 		this.disaster = d;
-		this.disaster.strike();
 		if(emergencyService != null)
 		emergencyService.receiveSOSCall(this);
 	}

@@ -251,14 +251,13 @@ public class Simulator implements WorldListener {
 		boolean gameOver3 = true;
 		boolean gameOver2Builds = true;
 		
-		if(!(this.plannedDisasters.isEmpty()))
+		if(this.plannedDisasters.isEmpty())
 			gameOver1 = true;
 		for(int i = 0; i < this.citizens.size(); i++) {
 			if(this.citizens.get(i).getDisaster()!=null)
-			if(!(citizens.get(i).getState().equals(CitizenState.DECEASED)) && citizens.get(i).getDisaster().isActive()==true) {
+			if(citizens.get(i).getDisaster().isActive()==true) {
 				gameOver2Citz = false;
 				break;
-				
 			}
 		}
 		for(int j = 0; j < this.buildings.size() ; j++) {
@@ -296,10 +295,21 @@ public class Simulator implements WorldListener {
 		this.checkDisasters();
 		this.checkUnits();
 		this.checkExecutedDisasters();
+		this.checkdeceased();
 		this.BuildsAndCitz();
 		this.currentCycle++;
 	
 	}
+	
+	
+	
+	public void checkdeceased() {
+		for(int i = 0; i < this.citizens.size();i++){
+			if(this.citizens.get(i).getState().equals(CitizenState.DECEASED))
+			this.citizens.get(i).getDisaster().setActive(false);
+			
+			}
+				}
 	
 	
 	public void checkDisasters() {
