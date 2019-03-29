@@ -19,6 +19,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	private int distanceToTarget;
 	private int stepsPerCycle;
 	private WorldListener worldListener;
+	private boolean firstTimeSetting;
 	
 
 	public Unit(String unitID, Address location, int stepsPerCycle ,WorldListener worldListener) {
@@ -77,30 +78,26 @@ public abstract class Unit implements Simulatable, SOSResponder {
 		
 		
 	}
-	if(this.getState() == UnitState.RESPONDING) {
-		Address Targetloc = this.getTarget().getLocation();
-		int x1 = this.getLocation().getX();
-		int x2 = this.getTarget().getLocation().getX();
-		int y1 = this.getLocation().getY();
-		int y2 = this.getTarget().getLocation().getY();
-		int x = x1-x2;
-		if(x < 0) {
-			x = x *-1;
-		}
-		int y = y1 - y2;
-		if(y < 0) {
-			y = y * -1;
-		}
-		int distance = x + y;
-		distance = distance - this.getStepsPerCycle();
-		this.setDistanceToTarget(distance);
-		if(distance <=0) {
-			this.setLocation(Targetloc);
+	if(this.getState().equals(UnitState.RESPONDING)) {
+		
+	
+		if(this.distanceToTarget - this.getStepsPerCycle() <= 0) {
+			this.setLocation(this.getTarget().getLocation());
+			this.setDistanceToTarget(0);
 			this.setState(UnitState.TREATING);
+			this.treat();
+			
 			
 		}
+		else {
+			this.setDistanceToTarget(this.distanceToTarget - this.getStepsPerCycle());
+			
+		}
+		
+		
 	}
 }
+	
 	
 	public void treat() {
 		

@@ -15,6 +15,7 @@ public abstract class PoliceUnit extends Unit {
 	private int distanceToBase;
 	private boolean ToGoBackToBuilding;
 	private boolean  ToGoBackToBase;
+	private boolean ToTreat;
 
 	public PoliceUnit(String unitID, Address location, int stepsPerCycle,WorldListener worldListener, int maxCapacity ) {
 
@@ -39,6 +40,11 @@ public abstract class PoliceUnit extends Unit {
 	
 	public void cycleStep() {
 		ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
+		if(this.ToTreat) {
+			this.treat();
+			this.ToTreat = false;
+			return;
+		}
 		
 		if(this.getState().equals(UnitState.RESPONDING)) {
 			for(int i = 0 ; i<x.getOccupants().size() ; i++) {
@@ -52,22 +58,25 @@ public abstract class PoliceUnit extends Unit {
 			}
 			
 			int distance = x.getLocation().getX() + x.getLocation().getY();
-			this.setDistanceToBase(distance);
+			this.setDistanceToTarget(distance);
+			distance = distance - this.getStepsPerCycle();
 			if(distance<=0) {
+				this.setDistanceToBase(x.getLocation().getX() + x.getLocation().getY());
 				this.setLocation(x.getLocation());
 				//dlw2ty 27na wasalna for the first time. We need to load up the citizens and make sure TO CHECK B3DAHA if there are any left. Also turn state into treating and call treat method
 				this.setState(UnitState.TREATING);
-				this.treat();
+				this.ToTreat=true;
 				this.ToGoBackToBase = true;
 			}
-			else {
-			distance = distance - this.getStepsPerCycle();
-			}
+		
+		}
 			
 			
 		if(this.getState().equals(UnitState.TREATING) && this.ToGoBackToBase ) {
 				
 				int distance2 = this.getDistanceToBase();
+				distance2 = distance2 - this.getStepsPerCycle();
+				this.setDistanceToBase(this.getDistanceToBase() - this.getStepsPerCycle());
 				if(distance2<=0) {
 					this.getWorldListener().assignAddress(this, 0, 0);
 					//big shit
@@ -97,31 +106,28 @@ public abstract class PoliceUnit extends Unit {
 								
 					}
 				}
-					else {
-						distance2 = distance2 - this.getStepsPerCycle();
-					}
+					
 					
 			}
 			
 			if(this.getState().equals(UnitState.TREATING) && this.ToGoBackToBuilding ) {
 				
 				int distance3 = x.getLocation().getX() + x.getLocation().getY();
+				distance3 = distance3-this.getStepsPerCycle();
 				if(distance3 <=0) {				
-					this.treat(); //3abeet
+					this.ToTreat=true; //3abeet
 					this.ToGoBackToBuilding = false;
 					this.ToGoBackToBase = true;
 					
 									
 				}
-				else {
-					distance3 = distance3-this.getStepsPerCycle();
-					
-				}
+				this.setDistanceToTarget(distance3);
+				
 					
 				
 			}
 			
-		}
+		
 		
 						
 		
@@ -146,11 +152,11 @@ public abstract class PoliceUnit extends Unit {
 		
 		if(!x.getOccupants().isEmpty()) {
 		for(int i = 0 ; i<x.getOccupants().size() && this.passengers.size()<this.maxCapacity ; i++) {
-				if(!x.getOccupants().get(i).getState().equals(CitizenState.DECEASED)) {
 					passengers.add(x.getOccupants().get(i));  //7ateeto fl 3rbya
-					x.getOccupants().remove(i);    //removed mn el occupants
+					x.getOccupants().remove(i);
+					//removed mn el occupants
 					
-				}
+				
 				
 			}
 		}

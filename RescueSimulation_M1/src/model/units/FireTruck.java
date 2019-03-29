@@ -13,21 +13,16 @@ public class FireTruck extends FireUnit {
 	}
 	public void treat() {
 		
-			if(this.getTarget() instanceof ResidentialBuilding) {
-				this.getTarget().getDisaster().setActive(false);
+			
 				ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
-				
-				if(x.getFireDamage()<=0) {
-					this.jobsDone();
-					
-				}
-				if(x.getFireDamage()>=100) {
-					this.jobsDone();
-					
-				}		
+				if(x.getDisaster()!= null)
+				x.getDisaster().setActive(false);
 				
 				int change = x.getFireDamage()-10;
 				x.setFireDamage(change);
+				if(x.getFireDamage()==0)
+				this.jobsDone();
+				
 				
 			}
 				
@@ -36,4 +31,4 @@ public class FireTruck extends FireUnit {
 		
 	}
 
-}
+

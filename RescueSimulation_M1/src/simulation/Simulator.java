@@ -41,8 +41,8 @@ public class Simulator implements WorldListener {
 		emergencyUnits = new ArrayList<Unit>();
 		plannedDisasters = new ArrayList<Disaster>();
 		executedDisasters = new ArrayList<Disaster>();
-		this.emergencyService =emergencyService;
-		this.currentCycle =0;
+		this.emergencyService = emergencyService;
+		this.currentCycle = 0;
 		world = new Address[10][10];
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -69,41 +69,38 @@ public class Simulator implements WorldListener {
 	}
 
 	private void loadUnits(String path) throws Exception {
-		
+
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		String line = br.readLine();
-		
-			
 
 		while (line != null) {
 
 			String[] info = line.split(",");
 			String id = info[1];
 			int steps = Integer.parseInt(info[2]);
-			
-			
+
 			switch (info[0]) {
 
 			case "AMB":
-				
-				emergencyUnits.add(new Ambulance(id, world[0][0], steps,this));
+
+				emergencyUnits.add(new Ambulance(id, world[0][0], steps, this));
 				break;
 
 			case "DCU":
-				
-				emergencyUnits.add(new DiseaseControlUnit(id, world[0][0], steps,this));
+
+				emergencyUnits.add(new DiseaseControlUnit(id, world[0][0], steps, this));
 				break;
 
 			case "EVC":
-				emergencyUnits.add(new Evacuator(id, world[0][0], steps, this,Integer.parseInt(info[3])));
+				emergencyUnits.add(new Evacuator(id, world[0][0], steps, this, Integer.parseInt(info[3])));
 				break;
 
 			case "FTK":
-				emergencyUnits.add(new FireTruck(id, world[0][0], steps,this));
+				emergencyUnits.add(new FireTruck(id, world[0][0], steps, this));
 				break;
 
 			case "GCU":
-				emergencyUnits.add(new GasControlUnit(id, world[0][0], steps,this));
+				emergencyUnits.add(new GasControlUnit(id, world[0][0], steps, this));
 				break;
 
 			}
@@ -147,7 +144,7 @@ public class Simulator implements WorldListener {
 			String id = info[2];
 			String name = info[3];
 			int age = Integer.parseInt(info[4]);
-			Citizen z = new Citizen(world[x][y], id, name, age,this);
+			Citizen z = new Citizen(world[x][y], id, name, age, this);
 			citizens.add(z);
 			z.setEmergencyService(emergencyService);
 
@@ -225,16 +222,16 @@ public class Simulator implements WorldListener {
 
 	@Override
 	public void assignAddress(Simulatable sim, int x, int y) {
-			if(sim instanceof Citizen) {
-				Citizen C = (Citizen)sim;
-				C.setLocation(world[x][y]);
-			}
-			if(sim instanceof Unit) {
-				Unit U = (Unit)sim;
-				U.setLocation(world[x][y]);
-				
-			}
-		
+		if (sim instanceof Citizen) {
+			Citizen C = (Citizen) sim;
+			C.setLocation(world[x][y]);
+		}
+		if (sim instanceof Unit) {
+			Unit U = (Unit) sim;
+			U.setLocation(world[x][y]);
+
+		}
+
 	}
 
 	public ArrayList<Unit> getEmergencyUnits() {
@@ -244,169 +241,177 @@ public class Simulator implements WorldListener {
 	public void setEmergencyService(SOSListener emergencyService) {
 		this.emergencyService = emergencyService;
 	}
-	
+
 	public boolean checkGameOver() {
 		boolean gameOver1 = false;
 		boolean gameOver2Citz = true;
 		boolean gameOver3 = true;
 		boolean gameOver2Builds = true;
-		
-		if(!(this.plannedDisasters.isEmpty()))
+
+		if ((this.plannedDisasters.isEmpty()))
 			gameOver1 = true;
-		for(int i = 0; i < this.citizens.size(); i++) {
-			if(this.citizens.get(i).getDisaster()!=null)
-			if(!(citizens.get(i).getState().equals(CitizenState.DECEASED)) && citizens.get(i).getDisaster().isActive()==true) {
-				gameOver2Citz = false;
-				break;
-				
-			}
-		}
-		for(int j = 0; j < this.buildings.size() ; j++) {
-			if(this.buildings.get(j).getDisaster()!= null)
-			if(buildings.get(j).getDisaster().isActive() == true) {
-				gameOver2Builds = false;
-				break;
-			}
-		}
-			
-			for(int z = 0 ; z<emergencyUnits.size();z++) {
-				if(!emergencyUnits.get(z).getState().equals(UnitState.IDLE)) {
-					gameOver3=false;
-				}
-			}
-			
 		
-		return(gameOver1 & gameOver2Citz & gameOver3 & gameOver2Builds);
+		for (int i = 0; i < this.citizens.size(); i++) {
+			if (this.citizens.get(i).getDisaster() != null)
+				if (!(citizens.get(i).getState().equals(CitizenState.DECEASED))
+						&& citizens.get(i).getDisaster().isActive() == true) {
+					gameOver2Citz = false;
+					return false;
+					
+
+				}
+		}
+		for(int p = 0 ; p<this.executedDisasters.size() ; p++) {
+			if(this.executedDisasters.get(p).isActive() ==true) {
+				return false;
+			}
+		}
+		for (int j = 0; j < this.buildings.size(); j++) {
+			if (this.buildings.get(j).getDisaster() != null)
+				if (buildings.get(j).getStructuralIntegrity()!=0 && buildings.get(j).getDisaster().isActive() == true) {
+					gameOver2Builds = false;
+					return false;
+					
+				}
+		}
+
+		for (int z = 0; z < emergencyUnits.size(); z++) {
+			if (!emergencyUnits.get(z).getState().equals(UnitState.IDLE)) {
+				gameOver3 = false;
+				return false;
+			}
+		}
+
+		return (gameOver1 & gameOver2Citz & gameOver3 & gameOver2Builds);
 	}
-	
-	
+
 	public int calculateCasualties() {
 		int r = 0;
-		for(int u = 0; u < this.citizens.size(); u++) {
-			if(citizens.get(u).getState().equals(CitizenState.DECEASED)) {
+		for (int u = 0; u < this.citizens.size(); u++) {
+			if (citizens.get(u).getState().equals(CitizenState.DECEASED)) {
 				r = r + 1;
 			}
 		}
 		return r;
 	}
-	
-	
-	
+
 	public void nextCycle() {
 		this.checkDisasters();
 		this.checkUnits();
 		this.checkExecutedDisasters();
 		this.BuildsAndCitz();
 		this.currentCycle++;
-	
+
 	}
-	
-	
+
 	public void checkDisasters() {
-		for(int i = 0 ; i<plannedDisasters.size() ; i++) {
-		if(this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
-			Disaster d = (Disaster)this.plannedDisasters.get(i);
-			
-			if(d instanceof Fire ) {
-				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
-				if(x.getDisaster()!= null) {
-					x.getDisaster().setActive(false);
+		for (int i = 0; i < plannedDisasters.size(); i++) {
+			if (this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
+				Disaster d = (Disaster) this.plannedDisasters.get(i);
+
+				if (d instanceof Fire) {
+					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
+					if (x.getDisaster() != null) {
+						x.getDisaster().setActive(false);
+					}
+					// LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new
+					// one. or if the disaster was null , 5osh 3latoo
+					if (x.getGasLevel() == 0) {
+						d.strike();
+						this.executedDisasters.add(d);
+						this.plannedDisasters.remove(i);
+					}
+
+					if (x.getGasLevel() > 0 && x.getGasLevel() < 70) {
+						Collapse k = new Collapse(this.currentCycle, x);
+						k.strike();
+						x.setFireDamage(0);
+						executedDisasters.add(k);
+						this.plannedDisasters.remove(i);
+					}
+
+					if (x.getGasLevel() >= 70) {
+						x.setStructuralIntegrity(0);
+						this.plannedDisasters.remove(i);
+					}
+
 				}
-				//LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new one. or if the disaster was null , 5osh 3latoo
-				if(x.getGasLevel() == 0) {
-					x.struckBy(d);
+
+				if (d instanceof GasLeak) {
+					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
+					if (x.getDisaster() instanceof Fire) {
+						// DONT FORGET TO DEACTIVE IF NOT NULL
+						if (x.getDisaster() != null)
+							x.getDisaster().setActive(false);
+						Collapse k2 = new Collapse(this.currentCycle, x);
+						k2.strike();
+						x.setFireDamage(0);
+						executedDisasters.add(k2);
+						plannedDisasters.remove(i);
+					}
+
+				}
+				if (d.getTarget() instanceof ResidentialBuilding) {
+					ResidentialBuilding x = (ResidentialBuilding) d.getTarget();
+					d.strike();
+					this.plannedDisasters.remove(i);
 					this.executedDisasters.add(d);
+				}
+
+				if (d.getTarget() instanceof Citizen) {
+					Citizen c = (Citizen) d.getTarget();
+					d.strike();
 					this.plannedDisasters.remove(i);
+					this.executedDisasters.add(d);
 				}
-				
-				if(x.getGasLevel()>0 && x.getGasLevel()<70) {
-					Collapse k = new Collapse(this.currentCycle,x);
-					x.struckBy(k);
-					x.setFireDamage(0);
-					executedDisasters.add(k);
-					this.plannedDisasters.remove(i);
-				}
-				
-				if(x.getGasLevel()>=70) {
-					x.setStructuralIntegrity(0);
-					this.plannedDisasters.remove(i);
-				}
-				
+
 			}
-			
-			if(d instanceof GasLeak) {
-				ResidentialBuilding x = (ResidentialBuilding)this.plannedDisasters.get(i).getTarget();
-				if(x.getDisaster() instanceof Fire) {
-					//DONT FORGET TO DEACTIVE IF NOT NULL
-					if(x.getDisaster()!= null)
-					x.getDisaster().setActive(false);
-					Collapse k2 = new Collapse(this.currentCycle,x);
-					x.struckBy(k2);
-					x.setFireDamage(0);
-					executedDisasters.add(k2);
-					plannedDisasters.remove(i);
-				}
-				
-			}
-			if(d.getTarget() instanceof ResidentialBuilding) {
-				ResidentialBuilding x = (ResidentialBuilding)d.getTarget();
-			x.struckBy(d);
-			this.plannedDisasters.remove(i);
-			this.executedDisasters.add(d);
-			}
-			
-			if(d.getTarget() instanceof Citizen) {
-				Citizen c = (Citizen)d.getTarget();
-				c.struckBy(d);
-				this.plannedDisasters.remove(i);
-				this.executedDisasters.add(d);
-			}
-			 
 		}
-		}
-		
-		for(int j = 0 ; j<buildings.size() ; j++) {
-			if(this.buildings.get(j).getFireDamage() == 100) {
-				Collapse f = new Collapse(this.currentCycle,this.buildings.get(j));
-				if(this.buildings.get(j).getDisaster() != null) {
+
+		for (int j = 0; j < buildings.size(); j++) {
+			if (this.buildings.get(j).getFireDamage() == 100) {
+				Collapse f = new Collapse(this.currentCycle, this.buildings.get(j));
+				if (this.buildings.get(j).getDisaster() != null) {
 					this.buildings.get(j).getDisaster().setActive(false);
 				}
 				this.buildings.get(j).struckBy(f);
 				this.executedDisasters.add(f);
 			}
 		}
-		for(int k = 0; k < this.executedDisasters.size(); k++) {
-			if(this.executedDisasters.get(k).isActive()) {
+		for (int k = 0; k < this.executedDisasters.size(); k++) {
+			if (this.executedDisasters.get(k).isActive()) {
 				this.executedDisasters.get(k).cycleStep();
 			}
 		}
 	}
-	
+
 	public void checkUnits() {
-		//go over the emergencyUnits Array and see which is responding to call the unit's cycleStep()
-		//Do I have to consider respond(rescuable r)?? la2a 3ashan el user howa elly bey-dispatch el units...baleez
-		for(int i = 0; i < this.emergencyUnits.size();i++) {
-			
-				this.emergencyUnits.get(i).cycleStep();
-		
-	}}
-	
+		// go over the emergencyUnits Array and see which is responding to call the
+		// unit's cycleStep()
+		// Do I have to consider respond(rescuable r)?? la2a 3ashan el user howa elly
+		// bey-dispatch el units...baleez
+		for (int i = 0; i < this.emergencyUnits.size(); i++) {
+
+			this.emergencyUnits.get(i).cycleStep();
+
+		}
+	}
+
 	public void checkExecutedDisasters() {
-		for(int i = 0; i < this.executedDisasters.size();i++) {
-			if(this.executedDisasters.get(i).isActive()== true) {
+		for (int i = 0; i < this.executedDisasters.size(); i++) {
+			if (this.executedDisasters.get(i).isActive() == true) {
 				this.executedDisasters.get(i).cycleStep();
 			}
 		}
 	}
-	
+
 	public void BuildsAndCitz() {
-		for(int i = 0; i < this.buildings.size(); i++) {
+		for (int i = 0; i < this.buildings.size(); i++) {
 			this.buildings.get(i).cycleStep();
 		}
-		for(int j = 0; j < this.citizens.size();j++) {
+		for (int j = 0; j < this.citizens.size(); j++) {
 			this.citizens.get(j).cycleStep();
 		}
 	}
-	
-	
+
 }
