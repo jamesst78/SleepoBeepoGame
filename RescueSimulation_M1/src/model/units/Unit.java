@@ -73,25 +73,25 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	}
 	
 	public void cycleStep() {
-	if(this.getState().equals(UnitState.TREATING)) {
-		this.treat();
-		
-		
-	}
-	if(this.getState().equals(UnitState.RESPONDING)) {
-		
+
 	
-		if(this.distanceToTarget - this.getStepsPerCycle() <= 0) {
-			this.setLocation(this.getTarget().getLocation());
-			this.setDistanceToTarget(0);
+	if(this.getState().equals(UnitState.RESPONDING) || this.getState().equals(UnitState.TREATING)){
+		
+		if(this.distanceToTarget ==0) {
+			this.worldListener.assignAddress(this, this.getTarget().getLocation().getX(), this.getTarget().getLocation().getY());		
 			this.setState(UnitState.TREATING);
 			this.treat();
 			
 			
 		}
 		else {
+		if(this.distanceToTarget - this.getStepsPerCycle() <= 0) {	
+			this.setDistanceToTarget(0);				
+		}
+		else {
 			this.setDistanceToTarget(this.distanceToTarget - this.getStepsPerCycle());
 			
+		}
 		}
 		
 		

@@ -296,78 +296,17 @@ public class Simulator implements WorldListener {
 	}
 
 	public void nextCycle() {
+		this.currentCycle++;
 		this.checkDisasters();
 		this.checkUnits();
 		this.checkExecutedDisasters();
 		this.BuildsAndCitz();
-		this.currentCycle++;
+		
 
 	}
 
 	public void checkDisasters() {
-		for (int i = 0; i < plannedDisasters.size(); i++) {
-			if (this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
-				Disaster d = (Disaster) this.plannedDisasters.get(i);
-
-				if (d instanceof Fire) {
-					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
-					if (x.getDisaster() != null) {
-						x.getDisaster().setActive(false);
-					}
-					// LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new
-					// one. or if the disaster was null , 5osh 3latoo
-					if (x.getGasLevel() == 0) {
-						d.strike();
-						this.executedDisasters.add(d);
-						this.plannedDisasters.remove(i);
-					}
-
-					if (x.getGasLevel() > 0 && x.getGasLevel() < 70) {
-						Collapse k = new Collapse(this.currentCycle, x);
-						k.strike();
-						x.setFireDamage(0);
-						executedDisasters.add(k);
-						this.plannedDisasters.remove(i);
-					}
-
-					if (x.getGasLevel() >= 70) {
-						x.setStructuralIntegrity(0);
-						this.plannedDisasters.remove(i);
-					}
-
-				}
-
-				if (d instanceof GasLeak) {
-					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
-					if (x.getDisaster() instanceof Fire) {
-						// DONT FORGET TO DEACTIVE IF NOT NULL
-						if (x.getDisaster() != null)
-							x.getDisaster().setActive(false);
-						Collapse k2 = new Collapse(this.currentCycle, x);
-						k2.strike();
-						x.setFireDamage(0);
-						executedDisasters.add(k2);
-						plannedDisasters.remove(i);
-					}
-
-				}
-				if (d.getTarget() instanceof ResidentialBuilding) {
-					ResidentialBuilding x = (ResidentialBuilding) d.getTarget();
-					d.strike();
-					this.plannedDisasters.remove(i);
-					this.executedDisasters.add(d);
-				}
-
-				if (d.getTarget() instanceof Citizen) {
-					Citizen c = (Citizen) d.getTarget();
-					d.strike();
-					this.plannedDisasters.remove(i);
-					this.executedDisasters.add(d);
-				}
-
-			}
-		}
-
+		
 		for (int j = 0; j < buildings.size(); j++) {
 			if (this.buildings.get(j).getFireDamage() == 100) {
 				Collapse f = new Collapse(this.currentCycle, this.buildings.get(j));
@@ -383,6 +322,78 @@ public class Simulator implements WorldListener {
 				this.executedDisasters.get(k).cycleStep();
 			}
 		}
+		
+		
+		for (int i = 0; i < plannedDisasters.size(); i++) {
+			if (this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
+				Disaster d = (Disaster) this.plannedDisasters.get(i);
+				this.plannedDisasters.remove(i);
+				
+
+				if (d instanceof Fire) {
+					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
+					if (x.getDisaster() != null) {
+						x.getDisaster().setActive(false);
+					}
+					// LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new
+					// one. or if the disaster was null , 5osh 3latoo
+					if (x.getGasLevel() == 0) {
+						d.strike();
+						this.executedDisasters.add(d);
+						return;
+						
+					}
+
+					if (x.getGasLevel() > 0 && x.getGasLevel() < 70) {
+						Collapse k = new Collapse(this.currentCycle, x);
+						k.strike();
+						x.setFireDamage(0);
+						executedDisasters.add(k);
+						return;
+						
+					}
+
+					if (x.getGasLevel() >= 70) {
+						x.setStructuralIntegrity(0);
+						return;
+						
+					}
+
+				}
+
+				if (d instanceof GasLeak) {
+					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
+					if (x.getDisaster() instanceof Fire) {
+						// DONT FORGET TO DEACTIVE IF NOT NULL
+						if (x.getDisaster() != null)
+							x.getDisaster().setActive(false);
+						Collapse k2 = new Collapse(this.currentCycle, x);
+						k2.strike();
+						x.setFireDamage(0);
+						executedDisasters.add(k2);
+						return;
+						
+					}
+
+				}
+				if (d.getTarget() instanceof ResidentialBuilding) {
+					ResidentialBuilding x = (ResidentialBuilding) d.getTarget();
+					d.strike();
+					
+					this.executedDisasters.add(d);
+				}
+
+				if (d.getTarget() instanceof Citizen) {
+					Citizen c = (Citizen) d.getTarget();
+					d.strike();
+					
+					this.executedDisasters.add(d);
+				}
+
+			}
+		}
+
+	
 	}
 
 	public void checkUnits() {
