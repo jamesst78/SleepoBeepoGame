@@ -91,8 +91,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 					p.setToGoBackToBase(false);
 					return;
 					
-				
-					
+						
 					
 					
 				}
@@ -125,9 +124,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 							p.setToGoBackToBuilding(false);
 							p.setDistanceToBase(distancetobase);
 							return;
-						
-							
-							
+											
 							
 						}
 						else {
@@ -189,7 +186,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 		
 		
 
-		if(!(this instanceof PoliceUnit)) {
+		else {
 	if(this.getState().equals(UnitState.RESPONDING) || this.getState().equals(UnitState.TREATING)){
 		
 		if(this.distanceToTarget ==0) {
