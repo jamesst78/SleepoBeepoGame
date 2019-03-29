@@ -329,6 +329,7 @@ public class Simulator implements WorldListener {
 				Disaster d = (Disaster) this.plannedDisasters.get(i);
 				this.plannedDisasters.remove(i);
 				
+				
 
 				if (d instanceof Fire) {
 					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
