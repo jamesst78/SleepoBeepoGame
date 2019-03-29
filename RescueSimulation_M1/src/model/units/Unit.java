@@ -73,24 +73,24 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	}
 	
 	public void cycleStep() {
+	
 		
 		if(this instanceof PoliceUnit) {
 			PoliceUnit p = (PoliceUnit)this;
 			ResidentialBuilding b  = (ResidentialBuilding)this.getTarget();
+		int distancetobase = b.getLocation().getX() + b.getLocation().getY();
 			
-			int distancetobase = p.getTarget().getLocation().getX() + p.getTarget().getLocation().getY();
+			
 			
 						
 			if(this.getState().equals(UnitState.RESPONDING)){
-				
-				if(this.distanceToTarget ==0) {
-					p.setDistanceToBase(distancetobase);
-					this.worldListener.assignAddress(this, this.getTarget().getLocation().getX(), this.getTarget().getLocation().getY());		
+				if(this.distanceToTarget ==0) {		
 					this.setState(UnitState.TREATING);
 					this.treat();
 					p.setToGoBackToBase(true);
 					p.setToGoBackToBase(false);
 					return;
+					
 				
 					
 					
@@ -99,12 +99,15 @@ public abstract class Unit implements Simulatable, SOSResponder {
 				else {
 				if(this.distanceToTarget - this.getStepsPerCycle() <= 0) {	
 					this.setDistanceToTarget(0);	
+					p.setDistanceToBase(distancetobase);
+					this.worldListener.assignAddress(p, b.getLocation().getX(), b.getLocation().getY());
+					return;
 					
 					
 				}
 				else {
 					this.setDistanceToTarget(this.distanceToTarget - this.getStepsPerCycle());
-					
+					return;
 				}
 				}
 				
@@ -113,9 +116,38 @@ public abstract class Unit implements Simulatable, SOSResponder {
 			else {
 				if(this.getState().equals(UnitState.TREATING)) {
 					int i = 0;
-					if(this.getState().equals(UnitState.TREATING) && p.isToGoBackToBase()) {
+					
+					if(this.getState().equals(UnitState.TREATING) && p.isToGoBackToBuilding()==true && p.isToGoBackToBase()==false) {
+						if(this.distanceToTarget ==0) {	
+							this.setState(UnitState.TREATING);
+							this.treat();
+							p.setToGoBackToBase(true);
+							p.setToGoBackToBuilding(false);
+							p.setDistanceToBase(distancetobase);
+							return;
+						
+							
+							
+							
+						}
+						else {
+						if(this.distanceToTarget - this.getStepsPerCycle() <= 0) {	
+							this.setDistanceToTarget(0);	
+							this.worldListener.assignAddress(p, b.getLocation().getX(), b.getLocation().getY());
+							
+						}
+						else {
+							this.setDistanceToTarget(this.distanceToTarget - this.getStepsPerCycle());
+							
+							
+						}
+						}
+					}
+						
+					
+					if(this.getState().equals(UnitState.TREATING) && p.isToGoBackToBase()==true &&p.isToGoBackToBuilding()==false) {
 						if(p.getDistanceToBase() == 0) {
-							this.getWorldListener().assignAddress(this, 0, 0);
+							
 							//hena han set location bel listener w nfady el nas w n4of law hnrg3 tany
 							while(!p.getPassengers().isEmpty()) {
 								p.getPassengers().get(i).getWorldListener().assignAddress(p.getPassengers().get(i), 0, 0);
@@ -126,46 +158,29 @@ public abstract class Unit implements Simulatable, SOSResponder {
 							p.setToGoBackToBase(false);
 							if(!b.getOccupants().isEmpty()) {
 								p.setToGoBackToBuilding(true);
+								this.distanceToTarget = distancetobase;
+								return;
 							}
 							else {
 								p.setToGoBackToBuilding(false);
 								this.jobsDone();
+								return;
 							}
 						}
+						
 						if(p.getDistanceToBase()-this.getStepsPerCycle() <=0) {
 							p.setDistanceToBase(0);
+							this.getWorldListener().assignAddress(this, 0, 0);
+							return;
+							
 							
 						}
 						else {
 							p.setDistanceToBase(p.getDistanceToBase()-this.stepsPerCycle);
+							return;
 						}
 					}
-					if(this.getState().equals(UnitState.TREATING) && p.isToGoBackToBuilding()) {
-						if(this.distanceToTarget ==0) {
-							p.setDistanceToBase(distancetobase);
-							this.worldListener.assignAddress(this, this.getTarget().getLocation().getX(), this.getTarget().getLocation().getY());		
-							this.setState(UnitState.TREATING);
-							this.treat();
-							p.setToGoBackToBase(true);
-							p.setToGoBackToBuilding(false);
-						
-							
-							
-							
-						}
-						else {
-						if(this.distanceToTarget - this.getStepsPerCycle() <= 0) {	
-							this.setDistanceToTarget(0);	
-							
-							
-						}
-						else {
-							this.setDistanceToTarget(this.distanceToTarget - this.getStepsPerCycle());
-							
-							
-						}
-						}
-					}
+					
 				}
 			}
 			

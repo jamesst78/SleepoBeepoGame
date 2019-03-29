@@ -13,25 +13,20 @@ public class Evacuator extends PoliceUnit {
 
 	}
 	public void treat() {
+		int i = 0;
 		if(this.getTarget() instanceof ResidentialBuilding) {
 			
-		ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
-		
-		if(!x.getOccupants().isEmpty()) {
-		for(int i = 0 ; i<x.getOccupants().size() && this.getPassengers().size()<this.getMaxCapacity() ; i++) {
-				
-					this.getPassengers().add(x.getOccupants().get(i));  //7ateeto fl 3rbya
-					x.getOccupants().remove(i); 
-					//removed mn el occupants
-					
-				
-				
-			}
-		}
-		
-				
+			ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
 			
-		}
+			while((!x.getOccupants().isEmpty()) && this.getPassengers().size()<this.getMaxCapacity() ) {
+						this.getPassengers().add(x.getOccupants().get(i));  //7ateeto fl 3rbya
+						x.getOccupants().remove(i); 
+						//removed mn el occupants
+						
+					
+					
+				}
+			}
 	}
 
 }
