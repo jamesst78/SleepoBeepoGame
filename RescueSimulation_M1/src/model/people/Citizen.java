@@ -146,7 +146,7 @@ public class Citizen implements Rescuable, Simulatable {
 	
 	public void struckBy(Disaster d) {
 		this.disaster = d;
-
+		this.disaster.setActive(true);
 		if(emergencyService != null)
 		emergencyService.receiveSOSCall(this);
 	}

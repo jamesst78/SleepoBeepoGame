@@ -298,50 +298,34 @@ public class Simulator implements WorldListener {
 	public void nextCycle() {
 		this.currentCycle++;
 		this.checkDisasters();
-		this.checkUnits();
-		this.checkExecutedDisasters();
-		this.BuildsAndCitz();
 		
-
+		this.checkExecutedDisasters();
+		this.Builds();
+		this.Citz();
 	}
 
 	public void checkDisasters() {
 		
-		for (int j = 0; j < buildings.size(); j++) {
-			if (this.buildings.get(j).getFireDamage() == 100) {
-				Collapse f = new Collapse(this.currentCycle, this.buildings.get(j));
-				if (this.buildings.get(j).getDisaster() != null) {
-					this.buildings.get(j).getDisaster().setActive(false);
-				}
-				this.buildings.get(j).struckBy(f);
-				this.executedDisasters.add(f);
-			}
-		}
-		for (int k = 0; k < this.executedDisasters.size(); k++) {
-			if (this.executedDisasters.get(k).isActive()) {
-				this.executedDisasters.get(k).cycleStep();
-			}
-		}
-		
-		
 		for (int i = 0; i < plannedDisasters.size(); i++) {
 			if (this.currentCycle == this.plannedDisasters.get(i).getStartCycle()) {
 				Disaster d = (Disaster) this.plannedDisasters.get(i);
-				this.plannedDisasters.remove(i);
-				
-				
+							
 
 				if (d instanceof Fire) {
+					
 					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
 					if (x.getDisaster() != null) {
 						x.getDisaster().setActive(false);
 					}
+					
 					// LAZEMMMM a deactive el disaster el adeema lel building dah and apply a new
 					// one. or if the disaster was null , 5osh 3latoo
 					if (x.getGasLevel() == 0) {
 						d.strike();
 						this.executedDisasters.add(d);
-						return;
+						this.plannedDisasters.remove(i);
+						i--;
+						continue;
 						
 					}
 
@@ -350,17 +334,21 @@ public class Simulator implements WorldListener {
 						k.strike();
 						x.setFireDamage(0);
 						executedDisasters.add(k);
-						return;
+						this.plannedDisasters.remove(i);
+						i--;
+						continue;
 						
 					}
 
 					if (x.getGasLevel() >= 70) {
 						x.setStructuralIntegrity(0);
-						return;
+						this.plannedDisasters.remove(i);
+						i--;
+						continue;
 						
 					}
-
 				}
+				
 
 				if (d instanceof GasLeak) {
 					ResidentialBuilding x = (ResidentialBuilding) this.plannedDisasters.get(i).getTarget();
@@ -371,28 +359,48 @@ public class Simulator implements WorldListener {
 						Collapse k2 = new Collapse(this.currentCycle, x);
 						k2.strike();
 						x.setFireDamage(0);
+						this.plannedDisasters.remove(i);
+						i--;
 						executedDisasters.add(k2);
-						return;
+						continue;
 						
 					}
 
 				}
 				if (d.getTarget() instanceof ResidentialBuilding) {
-					ResidentialBuilding x = (ResidentialBuilding) d.getTarget();
-					d.strike();
 					
+					d.strike();
+					this.plannedDisasters.remove(i);
+					i--;
 					this.executedDisasters.add(d);
+					continue;
 				}
 
 				if (d.getTarget() instanceof Citizen) {
-					Citizen c = (Citizen) d.getTarget();
-					d.strike();
 					
+					d.strike();
+					this.plannedDisasters.remove(i);
+					i--;
 					this.executedDisasters.add(d);
+					continue;
+					
 				}
 
 			}
+			
 		}
+		for (int j = 0; j < buildings.size(); j++) {
+			if (this.buildings.get(j).getFireDamage() == 100) {
+				Collapse f = new Collapse(this.currentCycle, this.buildings.get(j));
+				if (this.buildings.get(j).getDisaster() != null) {
+					this.buildings.get(j).getDisaster().setActive(false);
+				}
+				this.buildings.get(j).struckBy(f);
+				this.executedDisasters.add(f);
+			}
+		}
+	
+		this.checkUnits();
 
 	
 	}
@@ -417,10 +425,14 @@ public class Simulator implements WorldListener {
 		}
 	}
 
-	public void BuildsAndCitz() {
+	public void Builds() {
 		for (int i = 0; i < this.buildings.size(); i++) {
 			this.buildings.get(i).cycleStep();
 		}
+		
+	}
+	
+	public void Citz() {
 		for (int j = 0; j < this.citizens.size(); j++) {
 			this.citizens.get(j).cycleStep();
 		}

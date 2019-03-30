@@ -228,7 +228,12 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	public void respond(Rescuable r) {
 	
 		if (target!=null ) {
-			if (!(this instanceof MedicalUnit && this.getState()==UnitState.TREATING))
+			if(this.getTarget() instanceof Citizen) {
+				Citizen c = (Citizen)this.getTarget();
+			if (!(this instanceof Ambulance && c.getState().equals(CitizenState.RESCUED)))
+				target.struckBy(target.getDisaster());
+		}
+			else
 				target.struckBy(target.getDisaster());
 		}
 				
