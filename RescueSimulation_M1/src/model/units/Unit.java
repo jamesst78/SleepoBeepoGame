@@ -77,24 +77,21 @@ public abstract class Unit implements Simulatable, SOSResponder {
 		
 		if(this instanceof PoliceUnit) {
 			PoliceUnit p = (PoliceUnit)this;
-			ResidentialBuilding b  = (ResidentialBuilding)this.getTarget();
-		int distancetobase = b.getLocation().getX() + b.getLocation().getY();
-			
-			
-			
-						
+								
 			if(this.getState().equals(UnitState.RESPONDING)){
+				ResidentialBuilding b  = (ResidentialBuilding)this.getTarget();
+				int distancetobase = b.getLocation().getX() + b.getLocation().getY();
+				
+				
 				if(this.distanceToTarget ==0) {		
 					this.setState(UnitState.TREATING);
 					this.treat();
 					p.setToGoBackToBase(true);
-					p.setToGoBackToBase(false);
+					p.setToGoBackToBuilding(false);
 					return;
-					
 						
-					
-					
 				}
+				
 				else {
 				if(this.distanceToTarget - this.getStepsPerCycle() <= 0) {	
 					this.setDistanceToTarget(0);	
@@ -114,6 +111,8 @@ public abstract class Unit implements Simulatable, SOSResponder {
 			}
 			else {
 				if(this.getState().equals(UnitState.TREATING)) {
+					ResidentialBuilding b  = (ResidentialBuilding)this.getTarget();
+					int distancetobase = b.getLocation().getX() + b.getLocation().getY();
 					int i = 0;
 					
 					if(this.getState().equals(UnitState.TREATING) && p.isToGoBackToBuilding()==true && p.isToGoBackToBase()==false) {
