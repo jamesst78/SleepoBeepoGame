@@ -18,9 +18,11 @@ public class Evacuator extends PoliceUnit {
 			
 			ResidentialBuilding x = (ResidentialBuilding)this.getTarget();
 			
-			while((!x.getOccupants().isEmpty()) && this.getPassengers().size()<this.getMaxCapacity() ) {
+			while((!x.getOccupants().isEmpty()) && this.getPassengers().size()<this.getMaxCapacity()) {
+				if(!x.getOccupants().get(i).getState().equals(CitizenState.DECEASED)) {
 						this.getPassengers().add(x.getOccupants().get(i));  //7ateeto fl 3rbya
 						x.getOccupants().remove(i); 
+				}
 						//removed mn el occupants
 						
 					

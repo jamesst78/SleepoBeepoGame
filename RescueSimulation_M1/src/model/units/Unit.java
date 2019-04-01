@@ -147,18 +147,21 @@ public abstract class Unit implements Simulatable, SOSResponder {
 							//hena han set location bel listener w nfady el nas w n4of law hnrg3 tany
 							while(!p.getPassengers().isEmpty()) {
 								p.getPassengers().get(i).getWorldListener().assignAddress(p.getPassengers().get(i), 0, 0);
+								if(!p.getPassengers().get(i).getState().equals(CitizenState.DECEASED))
 								p.getPassengers().get(i).setState(CitizenState.RESCUED);
 								p.getPassengers().remove(i);
 								
 							}
 							p.setToGoBackToBase(false);
-							if(!b.getOccupants().isEmpty()) {
+							for(i = 0 ; i<b.getOccupants().size() ; i++) {
+							if(!b.getOccupants().get(i).getState().equals(CitizenState.DECEASED)) {
 								p.setToGoBackToBuilding(true);
 								this.distanceToTarget = distancetobase;
 								return;
 							}
-							else {
-								p.setToGoBackToBuilding(false);
+							
+						}
+							if(p.isToGoBackToBuilding()==false) {
 								this.jobsDone();
 								return;
 							}
