@@ -79,8 +79,17 @@ public abstract class Unit implements Simulatable, SOSResponder {
 			PoliceUnit p = (PoliceUnit)this;
 								
 			if(this.getState().equals(UnitState.RESPONDING)){
+				
 				ResidentialBuilding b  = (ResidentialBuilding)this.getTarget();
 				int distancetobase = b.getLocation().getX() + b.getLocation().getY();
+				if(p.getPassengers().size()==p.getMaxCapacity()) {
+					p.setToGoBackToBase(true);
+					p.setToGoBackToBuilding(false);
+					this.setState(UnitState.TREATING);
+					
+					
+				}
+				else {
 				
 				
 				if(this.distanceToTarget ==0) {		
@@ -108,6 +117,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 				}
 				
 				
+			}
 			}
 			else {
 				if(this.getState().equals(UnitState.TREATING)) {
@@ -238,7 +248,10 @@ public abstract class Unit implements Simulatable, SOSResponder {
 		}
 			else
 				target.struckBy(target.getDisaster());
+			
+			
 		}
+		
 				
 		
 		target = r;
