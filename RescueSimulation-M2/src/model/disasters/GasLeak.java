@@ -15,12 +15,20 @@ public class GasLeak extends Disaster {
 		
 		ResidentialBuilding target= (ResidentialBuilding)getTarget();
 		target.setGasLevel(target.getGasLevel()+10);
+		for(int i = 0 ; i< target.getOccupants().size() ; i++) {
+			target.getOccupants().get(i).setOxygenLevel(target.getOccupants().get(i).getOxygenLevel() - 15);
+		}
 		super.strike();
+		
 	}
 	@Override
 	public void cycleStep() {
 		ResidentialBuilding target= (ResidentialBuilding)getTarget();
 		target.setGasLevel(target.getGasLevel()+15);
+		
+		for(int i = 0 ; i< target.getOccupants().size() ; i++) {
+			target.getOccupants().get(i).setOxygenLevel(target.getOccupants().get(i).getOxygenLevel() - 15);
+		}
 		
 	}
 

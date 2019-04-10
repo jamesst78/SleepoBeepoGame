@@ -1,5 +1,6 @@
 package model.units;
 
+import model.disasters.Collapse;
 import model.disasters.Disaster;
 import model.events.SOSResponder;
 import model.events.WorldListener;
@@ -73,6 +74,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 
 		if (target != null && state == UnitState.TREATING)
 			reactivateDisaster();
+		if(this.canTreat(r))
 		finishRespond(r);
 
 	}
@@ -125,7 +127,24 @@ public abstract class Unit implements Simulatable, SOSResponder {
 		}
 		else {
 			ResidentialBuilding b = (ResidentialBuilding)r;
-			if()
+			if(this instanceof GasControlUnit) {
+				if(b.getGasLevel() ==0)
+					return false;
+				else
+					return true;
+			}
+			if(this instanceof FireUnit) {
+				if(b.getFireDamage() ==0)
+					return false;
+				else
+					return true;
+			}
+			else {
+				if(b.getDisaster() instanceof Collapse && b.getDisaster().isActive()==true)
+					return true;
+				return false;
+					
+			}
 		}
 	}
 }

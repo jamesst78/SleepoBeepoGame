@@ -19,6 +19,7 @@ public class Citizen implements Rescuable,Simulatable{
 	private Address location;
 	private SOSListener emergencyService;
 	private WorldListener worldListener;
+	private int oxygenLevel;
 	public Citizen(Address location,String nationalID, String name, int age
 			,WorldListener worldListener) {
 		this.name = name;
@@ -28,6 +29,7 @@ public class Citizen implements Rescuable,Simulatable{
 		this.state=CitizenState.SAFE;
 		this.hp=100;
 		this.worldListener = worldListener;
+		this.oxygenLevel = 100;
 	}
 	
 	public WorldListener getWorldListener() {
@@ -126,6 +128,24 @@ public class Citizen implements Rescuable,Simulatable{
 		disaster=d;
 		state= CitizenState.IN_TROUBLE;
 		emergencyService.receiveSOSCall(this);
+		
+	}
+
+	public int getOxygenLevel() {
+		return oxygenLevel;
+	}
+
+	public void setOxygenLevel(int oxygenLevel) {
+		this.oxygenLevel = oxygenLevel;
+		if(this.oxygenLevel <=0) {
+			this.oxygenLevel = 0;
+		}
+		if(this.oxygenLevel >= 100)
+			this.oxygenLevel = 100;
+		
+		if(this.oxygenLevel ==0) {
+			this.setHp(0);
+		}
 		
 	}
 	
