@@ -8,6 +8,7 @@ import model.people.Citizen;
 import model.units.Unit;
 import simulation.Rescuable;
 import simulation.Simulator;
+import view.GUI;
 
 public class CommandCenter implements SOSListener {
 
@@ -40,6 +41,13 @@ public class CommandCenter implements SOSListener {
 				visibleCitizens.add((Citizen) r);
 		}
 
+	}
+	public static void main(String[] args) throws Exception {
+		GUI Game = new GUI();
+	}
+
+	public Simulator getEngine() {
+		return engine;
 	}
 
 }
