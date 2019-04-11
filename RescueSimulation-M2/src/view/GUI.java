@@ -66,7 +66,7 @@ public class GUI extends JFrame implements ActionListener  {
 		 treatingUnitsPanel = new JPanel();
 		 buttonsOfMapPanel = new JPanel();
 		 infoPanelText = new JTextArea();
-		mainPanel.setSize(1200,600);
+		
 		
 		
 		
@@ -87,8 +87,11 @@ public class GUI extends JFrame implements ActionListener  {
 		
 		infoPanel.setPreferredSize(new Dimension (300,300));
 		infoPanel.setBackground(Color.BLACK);
-		infoPanel.add(infoPanelText, BorderLayout.CENTER);
+		infoPanel.add(infoPanelText, BorderLayout.SOUTH);
 		JLabel info = new JLabel("Information Panel");
+		JLabel decoy = new JLabel("7amada");
+		decoy.setForeground(Color.BLACK);
+		infoPanel.add(decoy, BorderLayout.CENTER);
 		info.setForeground(Color.WHITE);
 		infoPanel.add(info, BorderLayout.NORTH);
 		leftPanel.add(infoPanel , BorderLayout.NORTH);
@@ -142,7 +145,7 @@ public class GUI extends JFrame implements ActionListener  {
 		String k ="";
 		for(int i = 0 ; i<10 ; i++) {
 			for(int j = 0 ; j<10 ; j++) {
-				k = j+ "," +i;
+				k = i+ "," +j;
 				JButton b1 = new JButton(k);
 				buttonsOfMap.add(b1);
 				allButtons.add(b1);
@@ -163,6 +166,7 @@ public class GUI extends JFrame implements ActionListener  {
 		nextCycleButton.addActionListener(this);
 		allButtons.add(nextCycleButton);
 		midPanel.add(nextCycleButton, BorderLayout.SOUTH);
+		infoPanelText.setSize(new Dimension(300,300));
 		
 		
 
@@ -184,7 +188,7 @@ public class GUI extends JFrame implements ActionListener  {
 		temp = allButtons.get(i);
 		if(temp.equals(nextCycleButton)) {
 			player.getEngine().nextCycle();
-			infoPanelText.setText("\n Yes");
+			infoPanelText.setText("Yes");
 			infoPanelText.setVisible(true);
 		}
 		
