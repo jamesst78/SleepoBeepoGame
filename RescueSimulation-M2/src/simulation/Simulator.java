@@ -330,4 +330,28 @@ public class Simulator implements WorldListener {
 		return emergencyUnits;
 	}
 
+	public Address[][] getWorld() {
+		return world;
+	}
+
+	public int getCurrentCycle() {
+		return currentCycle;
+	}
+
+	public ArrayList<ResidentialBuilding> getBuildings() {
+		return buildings;
+	}
+
+	public ArrayList<Citizen> getCitizens() {
+		return citizens;
+	}
+
+	public ArrayList<Disaster> getPlannedDisasters() {
+		return plannedDisasters;
+	}
+
+	public ArrayList<Disaster> getExecutedDisasters() {
+		return executedDisasters;
+	}
+
 }

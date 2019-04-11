@@ -18,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.text.AttributeSet.FontAttribute;
 
 import controller.CommandCenter;
+import simulation.Address;
 
 public class GUI extends JFrame implements ActionListener  {
 	JPanel rightPanel;
@@ -32,6 +33,7 @@ public class GUI extends JFrame implements ActionListener  {
 	JPanel respondingUnitsPanel;
 	JPanel treatingUnitsPanel;
 	JPanel buttonsOfMapPanel;
+	JPanel textPanel;
 	JTextArea infoPanelText;
 	JTextArea t2;
 	JTextArea t3;
@@ -44,7 +46,7 @@ public class GUI extends JFrame implements ActionListener  {
 
 	public GUI() throws Exception{
 		this.player = new CommandCenter();
-		this.setResizable(false);
+		this.setResizable(true);
 		this.setTitle("Rescue Simulation By Yuka Engy Muhad");
 		this.setSize(1200, 600);
 		this.setVisible(true);
@@ -66,6 +68,7 @@ public class GUI extends JFrame implements ActionListener  {
 		 treatingUnitsPanel = new JPanel();
 		 buttonsOfMapPanel = new JPanel();
 		 infoPanelText = new JTextArea();
+		 textPanel = new JPanel();
 		
 		
 		
@@ -86,17 +89,21 @@ public class GUI extends JFrame implements ActionListener  {
 		
 		
 		infoPanel.setPreferredSize(new Dimension (300,300));
+		textPanel.setPreferredSize(new Dimension(300,260));
 		infoPanel.setBackground(Color.BLACK);
-		infoPanel.add(infoPanelText, BorderLayout.SOUTH);
+		textPanel.add(infoPanelText, BorderLayout.SOUTH);
+		infoPanelText.setMaximumSize(new Dimension(300,260));
+		infoPanelText.setBackground(Color.black);
+		infoPanelText.setForeground(Color.WHITE);
+		textPanel.setBackground(Color.black);
 		JLabel info = new JLabel("Information Panel");
 		JLabel decoy = new JLabel("7amada");
 		decoy.setForeground(Color.BLACK);
-		infoPanel.add(decoy, BorderLayout.CENTER);
+		
 		info.setForeground(Color.WHITE);
 		infoPanel.add(info, BorderLayout.NORTH);
+		infoPanel.add(textPanel , BorderLayout.SOUTH);
 		leftPanel.add(infoPanel , BorderLayout.NORTH);
-		
-		
 		
 		logPanel.setPreferredSize(new Dimension(300,200));
 		logPanel.setBackground(Color.BLACK);
@@ -147,6 +154,7 @@ public class GUI extends JFrame implements ActionListener  {
 			for(int j = 0 ; j<10 ; j++) {
 				k = i+ "," +j;
 				JButton b1 = new JButton(k);
+				b1.setName(i + " " + j);
 				buttonsOfMap.add(b1);
 				allButtons.add(b1);
 				b1.addActionListener(this);
@@ -188,8 +196,21 @@ public class GUI extends JFrame implements ActionListener  {
 		temp = allButtons.get(i);
 		if(temp.equals(nextCycleButton)) {
 			player.getEngine().nextCycle();
-			infoPanelText.setText("Yes");
+			infoPanelText.setText("Structral Integ: 98 \n Citizens ALive : 5 \n Gas Level : 10");
 			infoPanelText.setVisible(true);
+		}
+		else {
+			String x = temp.getName();
+			int I = x.charAt(0);
+			int J = x.charAt(1);
+			Address  a = this.player.getEngine().getWorld()[1][1];
+			for(int p =0;p<this.player.getEngine().getBuildings().size() ; p++) {
+				if(this.player.getEngine().getBuildings().get(p).getLocation().equals(a)) {
+					infoPanelText.setText(this.player.getEngine().getBuildings().get(p).getInfo());
+					infoPanelText.setVisible(true);
+				}
+			}
+			
 		}
 		
 	}

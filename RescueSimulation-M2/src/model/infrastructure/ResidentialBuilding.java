@@ -113,4 +113,23 @@ public class ResidentialBuilding implements Rescuable, Simulatable
 		disaster=d;
 		emergencyService.receiveSOSCall(this);
 	}
+	public String getInfo() {
+		String k = "";
+		k = k +"Address : " + this.location + "\n";
+		k = k +"Structural Integrity :"  +this.structuralIntegrity + "\n";
+		k = k+"Fire Damage :" + this.fireDamage + "\n";
+		k = k + "Gas Level :" + this.gasLevel + "\n";
+		k = k + "Foundation Damage :" + this.foundationDamage + "\n";
+		k = k + "Number of Occuptants :" + this.getOccupants().size() + "\n";
+		
+		if(this.disaster!= null) {
+			if(this.disaster.isActive()) {
+				String o = "Active";
+				k= k+ "Disaster :" + this.getDisaster() + " is " + o + "\n";
+			}
+		}
+		
+		
+		return k;
+	}
 }
