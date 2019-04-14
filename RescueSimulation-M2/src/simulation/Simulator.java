@@ -353,5 +353,35 @@ public class Simulator implements WorldListener {
 	public ArrayList<Disaster> getExecutedDisasters() {
 		return executedDisasters;
 	}
+	
+	
+	
+	public String eventsJustHappened() {
+		String k = "";
+		
+		for(int i = 0 ; i<this.citizens.size(); i++) {
+			if(citizens.get(i).getState().equals(CitizenState.DECEASED) && this.citizens.get(i).isInText()) {
+				k+= "Citizen " + citizens.get(i).getName() + "Has just died at the address " + citizens.get(i).getLocation().getX() + "," 
+						+ citizens.get(i).getLocation().getY() + "\n";
+				
+				citizens.get(i).setInText(false);
+			}
+		
+		}
+		for(int i = 0 ; i<this.buildings.size(); i++) {
+			if(buildings.get(i).getStructuralIntegrity()==0 && this.buildings.get(i).isInText()) {
+				k+="Building at address " + this.buildings.get(i).getLocation().getX() + "," + 
+			this.buildings.get(i).getLocation().getY() + " has been destroyed";
+				buildings.get(i).setInText(false);
+			}
+		}
+		return k;
+		
+		
+		
+		
+		
+		
+	}
 
 }

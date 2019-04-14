@@ -20,6 +20,7 @@ public class Citizen implements Rescuable,Simulatable{
 	private SOSListener emergencyService;
 	private WorldListener worldListener;
 	private int oxygenLevel;
+	private boolean inText;
 	public Citizen(Address location,String nationalID, String name, int age
 			,WorldListener worldListener) {
 		this.name = name;
@@ -30,6 +31,7 @@ public class Citizen implements Rescuable,Simulatable{
 		this.hp=100;
 		this.worldListener = worldListener;
 		this.oxygenLevel = 100;
+		this.inText = true;
 	}
 	
 	public WorldListener getWorldListener() {
@@ -147,6 +149,14 @@ public class Citizen implements Rescuable,Simulatable{
 			this.setHp(0);
 		}
 		
+	}
+
+	public boolean isInText() {
+		return inText;
+	}
+
+	public void setInText(boolean inText) {
+		this.inText = inText;
 	}
 	
 	

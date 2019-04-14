@@ -34,8 +34,9 @@ public class GUI extends JFrame implements ActionListener  {
 	JPanel treatingUnitsPanel;
 	JPanel buttonsOfMapPanel;
 	JPanel textPanel;
+	JPanel LogPanelDescendant;
 	JTextArea infoPanelText;
-	JTextArea t2;
+	JTextArea logPanelText;
 	JTextArea t3;
 	JTextArea t4;
 	JTextArea t5;
@@ -46,7 +47,7 @@ public class GUI extends JFrame implements ActionListener  {
 
 	public GUI() throws Exception{
 		this.player = new CommandCenter();
-		this.setResizable(true);
+		this.setResizable(false);
 		this.setTitle("Rescue Simulation By Yuka Engy Muhad");
 		this.setSize(1200, 600);
 		this.setVisible(true);
@@ -69,6 +70,8 @@ public class GUI extends JFrame implements ActionListener  {
 		 buttonsOfMapPanel = new JPanel();
 		 infoPanelText = new JTextArea();
 		 textPanel = new JPanel();
+		 logPanelText = new JTextArea();
+		 LogPanelDescendant = new JPanel();
 		
 		
 		
@@ -144,17 +147,30 @@ public class GUI extends JFrame implements ActionListener  {
 		treatingUnitsPanel.setBackground(Color.LIGHT_GRAY);
 		rightPanel.add(treatingUnitsPanel);
 		
+		
+		LogPanelDescendant.setPreferredSize(new Dimension(300,190));
+		logPanel.add(LogPanelDescendant , BorderLayout.SOUTH);
+		LogPanelDescendant.add(logPanelText);
+		logPanelText.setForeground(Color.white);
+		logPanelText.setBackground(Color.BLACK);
+		LogPanelDescendant.setBackground(Color.black);
+		
+		
 		//working on the array of buttons
 		buttonsOfMapPanel.setPreferredSize(new Dimension(600,500));
 		buttonsOfMapPanel.setLayout(new GridLayout(10,10));
 		mapPanel.add(buttonsOfMapPanel , BorderLayout.NORTH);
+		
+		
+		
+		
 		
 		String k ="";
 		for(int i = 0 ; i<10 ; i++) {
 			for(int j = 0 ; j<10 ; j++) {
 				k = i+ "," +j;
 				JButton b1 = new JButton(k);
-				b1.setName(i + " " + j);
+				b1.setName(i +""+ j);
 				buttonsOfMap.add(b1);
 				allButtons.add(b1);
 				b1.addActionListener(this);
@@ -183,6 +199,7 @@ public class GUI extends JFrame implements ActionListener  {
 	
 	public static void main(String[] args) throws Exception {
 		GUI game = new GUI();
+		game.setVisible(true);
 	}
 
 	@Override
@@ -196,18 +213,26 @@ public class GUI extends JFrame implements ActionListener  {
 		temp = allButtons.get(i);
 		if(temp.equals(nextCycleButton)) {
 			player.getEngine().nextCycle();
-			infoPanelText.setText("Structral Integ: 98 \n Citizens ALive : 5 \n Gas Level : 10");
-			infoPanelText.setVisible(true);
+			logPanelText.setText(this.player.getEngine().eventsJustHappened());
+			logPanelText.setVisible(true);
+			
+			
+			
+			
 		}
-		else {
+		if(buttonsOfMap.contains(temp)) {
 			String x = temp.getName();
-			int I = x.charAt(0);
-			int J = x.charAt(1);
-			Address  a = this.player.getEngine().getWorld()[1][1];
+			int u = Integer.parseInt(x);
+			int I = u/10;
+			int J = u%10;
+			System.out.println(I);
+			Address  a = this.player.getEngine().getWorld()[I][J];
 			for(int p =0;p<this.player.getEngine().getBuildings().size() ; p++) {
 				if(this.player.getEngine().getBuildings().get(p).getLocation().equals(a)) {
 					infoPanelText.setText(this.player.getEngine().getBuildings().get(p).getInfo());
 					infoPanelText.setVisible(true);
+					System.out.println("i got here");
+					break;
 				}
 			}
 			

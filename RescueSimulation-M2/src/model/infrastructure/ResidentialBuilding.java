@@ -20,10 +20,12 @@ public class ResidentialBuilding implements Rescuable, Simulatable
 	private ArrayList<Citizen> occupants;
 	private Disaster disaster;
 	private SOSListener emergencyService;
+	private boolean inText;
 	public ResidentialBuilding(Address location) {
 		this.location = location;
 		this.structuralIntegrity=100;
 		occupants= new ArrayList<Citizen>();
+		this.inText = true;
 	}
 	public int getStructuralIntegrity() {
 		return structuralIntegrity;
@@ -131,5 +133,11 @@ public class ResidentialBuilding implements Rescuable, Simulatable
 		
 		
 		return k;
+	}
+	public boolean isInText() {
+		return inText;
+	}
+	public void setInText(boolean inText) {
+		this.inText = inText;
 	}
 }
