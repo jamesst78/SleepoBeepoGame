@@ -55,8 +55,10 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 	CommandCenter player;
 	ArrayList<JButton> buttonsOfMap = new ArrayList<>();
 	ArrayList<JButton> allButtons = new ArrayList<>();
+	ArrayList<JButton> unitsButtons = new ArrayList<>();
 	JButton nextCycleButton;
 	Object [] inThisLocation;
+	GUI gui;
 
 	public GUI() throws Exception{
 		this.player = new CommandCenter();
@@ -89,6 +91,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		 AvailableUnits = new JPanel();
 		 RespondingUnits = new JPanel();
 		 TreatingUnits = new JPanel();
+		 this.gui = this;
 		 
 		
 		
@@ -190,12 +193,26 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		
 		
 		for(int i = 0; i < this.player.getEngine().getEmergencyUnits().size(); i++) {
-			JButton b2 = new JButton("unit");
+			String t = this.player.getEngine().getEmergencyUnits().get(i).getUnitID();
+			JButton b2 = new JButton("Unit");
+			b2.setName(t);
 			this.allButtons.add(b2);
+			this.unitsButtons.add(b2);
 			b2.addMouseListener(new java.awt.event.MouseAdapter(){
 				public void mouseEntered(java.awt.event.MouseEvent evt) {
-					b2.setBackground(Color.RED);
-					actionPerformed(evt);
+					if(unitsButtons.contains(evt.getSource())){
+						for(int r = 0 ; r<unitsButtons.size() ; r++) {
+							if(unitsButtons.get(r).getName().equals(((JButton) evt.getSource()).getName())) {
+								for(int u = 0 ; u<gui.player.getEngine().getEmergencyUnits().size();u++) {
+									if(gui.player.getEngine().getEmergencyUnits().get(u).getUnitID().equals(unitsButtons.get(r).getName())) {
+										infoPanelText.setText(gui.player.getEngine().getEmergencyUnits().get(u).getInfo());
+										infoPanelText.setVisible(true);
+									}
+								}
+							}
+						}
+					}
+					
 				}
 				public void mouseExited(java.awt.event.MouseEvent evt) {
 					
