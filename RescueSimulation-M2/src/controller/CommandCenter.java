@@ -50,4 +50,12 @@ public class CommandCenter implements SOSListener {
 		return engine;
 	}
 
+	public ArrayList<ResidentialBuilding> getVisibleBuildings() {
+		return visibleBuildings;
+	}
+
+	public ArrayList<Citizen> getVisibleCitizens() {
+		return visibleCitizens;
+	}
+
 }

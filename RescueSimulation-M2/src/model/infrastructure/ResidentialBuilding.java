@@ -21,11 +21,13 @@ public class ResidentialBuilding implements Rescuable, Simulatable
 	private Disaster disaster;
 	private SOSListener emergencyService;
 	private boolean inText;
+	private boolean iconAlreadySet;
 	public ResidentialBuilding(Address location) {
 		this.location = location;
 		this.structuralIntegrity=100;
 		occupants= new ArrayList<Citizen>();
 		this.inText = true;
+		this.iconAlreadySet = false;
 	}
 	public int getStructuralIntegrity() {
 		return structuralIntegrity;
@@ -66,6 +68,7 @@ public class ResidentialBuilding implements Rescuable, Simulatable
 		}
 	}
 	public int getFoundationDamage() {
+		
 		return foundationDamage;
 	}
 	public void setFoundationDamage(int foundationDamage) {
@@ -74,8 +77,10 @@ public class ResidentialBuilding implements Rescuable, Simulatable
 		{
 			
 			setStructuralIntegrity(0);
+			this.foundationDamage = 100;
 		}
-			
+		
+				
 	}
 	public Address getLocation() {
 		return location;
@@ -139,5 +144,11 @@ public class ResidentialBuilding implements Rescuable, Simulatable
 	}
 	public void setInText(boolean inText) {
 		this.inText = inText;
+	}
+	public boolean isIconAlreadySet() {
+		return iconAlreadySet;
+	}
+	public void setIconAlreadySet(boolean iconAlreadySet) {
+		this.iconAlreadySet = iconAlreadySet;
 	}
 }

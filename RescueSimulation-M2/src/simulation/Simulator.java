@@ -359,6 +359,14 @@ public class Simulator implements WorldListener {
 	public String eventsJustHappened() {
 		String k = "";
 		
+		//form a loop over the excuted disasters
+		//if the flag of this excuted disaster is true lesa , add it to the text saying it affected x rescuable
+		//at the y location of the world map
+		//
+		
+		
+		
+		
 		for(int i = 0 ; i<this.citizens.size(); i++) {
 			if(citizens.get(i).getState().equals(CitizenState.DECEASED) && this.citizens.get(i).isInText()) {
 				k+= "Citizen " + citizens.get(i).getName() + "Has just died at the address " + citizens.get(i).getLocation().getX() + "," 
@@ -375,6 +383,45 @@ public class Simulator implements WorldListener {
 				buildings.get(i).setInText(false);
 			}
 		}
+		
+		for(int i = 0 ; i<this.executedDisasters.size() ; i++) {
+			if(executedDisasters.get(i).isInText()) {
+				
+				if(executedDisasters.get(i) instanceof Collapse) {
+					k+= "A Collapse has struck a building at address \n " + executedDisasters.get(i).getTarget().getLocation().getX() + ","
+							+ executedDisasters.get(i).getTarget().getLocation().getY() + "\n";
+					
+					executedDisasters.get(i).setInText(false);
+				}
+				if(executedDisasters.get(i) instanceof Fire) {
+					k+= "A Fire has struck a building at address \n " + executedDisasters.get(i).getTarget().getLocation().getX() + ","
+							+ executedDisasters.get(i).getTarget().getLocation().getY() +"\n";
+					executedDisasters.get(i).setInText(false);
+				}
+				
+				if(executedDisasters.get(i) instanceof GasLeak) {
+					k+= "A GasLeak has struck a building at address \n " + executedDisasters.get(i).getTarget().getLocation().getX() + ","
+							+ executedDisasters.get(i).getTarget().getLocation().getY() + "\n";
+					executedDisasters.get(i).setInText(false);
+				}
+				if(executedDisasters.get(i) instanceof Infection) {
+					k+= "An Infection has struck a Citizen at address \n" + executedDisasters.get(i).getTarget().getLocation().getX() + ","
+							+ executedDisasters.get(i).getTarget().getLocation().getY() + " \n Whose name is  \n " +((Citizen) executedDisasters.get(i).getTarget()).getName() + "\n";
+					executedDisasters.get(i).setInText(false);
+				}
+				if(executedDisasters.get(i) instanceof Injury) {
+					k+= "An Injury has struck a Citizen at address \n" + executedDisasters.get(i).getTarget().getLocation().getX() + ","
+							+ executedDisasters.get(i).getTarget().getLocation().getY() + "\n Whose name is  \n " +((Citizen) executedDisasters.get(i).getTarget()).getName() + "\n";
+					executedDisasters.get(i).setInText(false);
+				}
+				
+			}
+		}
+		
+		
+		
+		
+		
 		return k;
 		
 		

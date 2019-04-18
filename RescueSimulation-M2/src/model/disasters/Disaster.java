@@ -11,6 +11,7 @@ public abstract class Disaster implements Simulatable{
 	public Disaster(int startCycle, Rescuable target) {
 		this.startCycle = startCycle;
 		this.target = target;
+		this.inText = true;
 	}
 	public boolean isActive() {
 		return active;
@@ -35,5 +36,21 @@ public abstract class Disaster implements Simulatable{
 	}
 	public void setInText(boolean inText) {
 		this.inText = inText;
+	}
+	public String toString() {
+		String x = "";
+		if(this instanceof Collapse)
+			x = "Collapse";
+		if(this instanceof Fire)
+			x = "Fire";
+		if(this instanceof GasLeak)
+			x = "GasLeak";
+		if(this instanceof Infection)
+			x = "Infection";
+		if(this instanceof Injury)
+			x = "Injury";
+		
+		
+		return x;
 	}
 }

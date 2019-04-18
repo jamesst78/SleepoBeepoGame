@@ -21,6 +21,7 @@ public class Citizen implements Rescuable,Simulatable{
 	private WorldListener worldListener;
 	private int oxygenLevel;
 	private boolean inText;
+	private boolean iconAlreadySet;
 	public Citizen(Address location,String nationalID, String name, int age
 			,WorldListener worldListener) {
 		this.name = name;
@@ -32,6 +33,7 @@ public class Citizen implements Rescuable,Simulatable{
 		this.worldListener = worldListener;
 		this.oxygenLevel = 100;
 		this.inText = true;
+		this.iconAlreadySet = false;
 	}
 	
 	public WorldListener getWorldListener() {
@@ -158,6 +160,31 @@ public class Citizen implements Rescuable,Simulatable{
 	public void setInText(boolean inText) {
 		this.inText = inText;
 	}
+
+	public boolean isIconAlreadySet() {
+		return iconAlreadySet;
+	}
+
+	public void setIconAlreadySet(boolean iconAlreadySet) {
+		this.iconAlreadySet = iconAlreadySet;
+	}
 	
+	public String getInfo() {
+		String x = "";
+		x += "location : " + this.getLocation().getX() + "," + this.getLocation().getY() + "\n";
+		x += "Name : " + this.getName() + "\n";
+		x += "age : " + this.getAge() + "\n";
+		x += "Natinal ID : " + this.nationalID + "\n";
+		x+= "HP : " + this.getHp() + "\n";
+		x+= "BloodLoss : " + this.getBloodLoss() + "\n";
+		x+= "Toxicity : " + this.getToxicity() + "\n";
+		x+= "CitizenState : " + this.getState() + "\n";
+		if(this.getDisaster().isActive()) {
+		x+= "Disaster : " + this.getDisaster().toString() + "\n";
+		}
+		return x;		
+		
+		
+	}
 	
 }

@@ -147,4 +147,51 @@ public abstract class Unit implements Simulatable, SOSResponder {
 			}
 		}
 	}
+	public String getInfo() {
+		String x = "";
+		
+		x+= "Unit's ID : " +this.unitID + "\n";
+		x+= "Location : " + this.getLocation().getX() + "," + this.getLocation().getY() + "\n";
+		x+="Steps per cycle : " + this.getStepsPerCycle() + "\n";
+		if(this.target!=null) {
+			if(target instanceof Citizen) {
+				x+= "Target : Citizen with name " + ((Citizen) this.getTarget()).getName() + "\n";
+			}
+			else {
+				x+= "Target : Building ";
+			}
+			
+			x+= "At Location : " + target.getLocation().getX() + ","+ target.getLocation().getY() +"\n";
+			
+		}
+		
+		if(this instanceof PoliceUnit) {
+			PoliceUnit y = (PoliceUnit)this;
+			x += "Unit of Type : Evacuator" + "\n";
+			x += "Number of Passengers : " + y.getPassengers().size() + "\n";
+			x+= "Passengers' info :  \n";
+			for(int i = 0 ; i<y.getPassengers().size() ; i++) {
+				x+= y.getPassengers().get(i).getInfo();
+			}
+			
+		}
+		if(this instanceof Ambulance) {
+			x+= "Unit type : Ambulance \n"; 
+		}
+		if(this instanceof DiseaseControlUnit) {
+			x+= "Unit type : DiseaseControlUnit \n";
+		}
+		if(this instanceof FireTruck) {
+			x+= "Unit type : FireTruck";
+		}
+		if(this instanceof GasControlUnit) {
+			x+= "Unit type : GasControlUnit";
+		}
+		
+		
+		
+			return x;
+		
+		
+	}
 }
