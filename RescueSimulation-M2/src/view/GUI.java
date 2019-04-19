@@ -26,6 +26,7 @@ import javax.swing.JTextArea;
 import javax.swing.text.AttributeSet.FontAttribute;
 
 import controller.CommandCenter;
+import model.units.UnitState;
 import simulation.Address;
 
 public class GUI extends JFrame implements ActionListener , EventListener {
@@ -56,6 +57,10 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 	ArrayList<JButton> buttonsOfMap = new ArrayList<>();
 	ArrayList<JButton> allButtons = new ArrayList<>();
 	ArrayList<JButton> unitsButtons = new ArrayList<>();
+	ArrayList<JButton> AvailableUnitsArrayButtons = new ArrayList<>();
+	ArrayList<JButton> RespondingUnitsArrayButtons = new ArrayList<>();
+	ArrayList<JButton> TreatingUnitsArrayButtons = new ArrayList<>();
+	
 	JButton nextCycleButton;
 	Object [] inThisLocation;
 	GUI gui;
@@ -92,6 +97,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		 RespondingUnits = new JPanel();
 		 TreatingUnits = new JPanel();
 		 this.gui = this;
+		
 		 
 		
 		
@@ -219,6 +225,8 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 				}
 			});
 			AvailableUnits.add(b2);
+			AvailableUnitsArrayButtons.add(b2);
+			
 		}
 		
 		
@@ -356,6 +364,72 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 				}
 			}
 			
+			
+			for(int t = 0 ;t<AvailableUnitsArrayButtons.size() ; t++){
+				String ID = AvailableUnitsArrayButtons.get(t).getName();
+				JButton current = AvailableUnitsArrayButtons.get(t);
+				for(int r = 0 ; r<this.player.getEngine().getEmergencyUnits().size();r++) {
+					if(this.player.getEngine().getEmergencyUnits().get(r).getUnitID().equals(ID)) {
+						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.RESPONDING)) {
+							AvailableUnits.remove(current);
+							AvailableUnitsArrayButtons.remove(current);
+							RespondingUnits.add(current);
+							RespondingUnitsArrayButtons.add(current);
+						}
+						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.TREATING)) {
+							AvailableUnits.remove(current);
+							AvailableUnitsArrayButtons.remove(current);
+							TreatingUnits.add(current);
+							TreatingUnitsArrayButtons.add(current);
+						}
+					}
+					
+				}
+			}
+			
+			for(int t = 0 ;t<RespondingUnitsArrayButtons.size() ; t++){
+				String ID = RespondingUnitsArrayButtons.get(t).getName();
+				JButton current = RespondingUnitsArrayButtons.get(t);
+				for(int r = 0 ; r<this.player.getEngine().getEmergencyUnits().size();r++) {
+					if(this.player.getEngine().getEmergencyUnits().get(r).getUnitID().equals(ID)) {
+						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.IDLE)) {
+							RespondingUnits.remove(current);
+							RespondingUnitsArrayButtons.remove(current);
+							AvailableUnits.add(current);
+							AvailableUnitsArrayButtons.add(current);
+						}
+						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.TREATING)) {
+							RespondingUnits.remove(current);
+							RespondingUnitsArrayButtons.remove(current);
+							TreatingUnits.add(current);
+							TreatingUnitsArrayButtons.add(current);
+						}
+					}
+					
+				}
+			}
+			
+			for(int t = 0 ;t<TreatingUnitsArrayButtons.size() ; t++){
+				String ID = TreatingUnitsArrayButtons.get(t).getName();
+				JButton current = TreatingUnitsArrayButtons.get(t);
+				for(int r = 0 ; r<this.player.getEngine().getEmergencyUnits().size();r++) {
+					if(this.player.getEngine().getEmergencyUnits().get(r).getUnitID().equals(ID)) {
+						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.IDLE)) {
+							TreatingUnits.remove(current);
+							TreatingUnitsArrayButtons.remove(current);
+							AvailableUnits.add(current);
+							AvailableUnitsArrayButtons.add(current);
+						}
+						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.RESPONDING)) {
+							TreatingUnits.remove(current);
+							TreatingUnitsArrayButtons.remove(current);
+							RespondingUnits.add(current);
+							RespondingUnitsArrayButtons.add(current);
+						}
+					}
+					
+				}
+			}
 			
 			
 			
