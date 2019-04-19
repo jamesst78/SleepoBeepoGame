@@ -327,7 +327,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 							case(2): theChosen = "building2.png";break;
 							case(3): theChosen = "building3.png";break;
 							case(4): theChosen = "building4.png";break;
-									
+									//hii
 							}
 							
 							ImageIcon  img = new ImageIcon(theChosen);
