@@ -315,7 +315,12 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		midPanel.add(nextCycleButton, BorderLayout.SOUTH);
 		infoPanelText.setSize(new Dimension(300,300));
 		
-		
+		for(int q = 0 ; q<buttonsOfMap.size() ; q ++) {
+			if(buttonsOfMap.get(q).getName().equals("00")) {
+				ImageIcon  img = new ImageIcon("base.png");
+				buttonsOfMap.get(q) .setIcon(img);
+			}
+		}
 
 		
 	}
@@ -510,6 +515,13 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 			System.out.println(I);
 			String total = "";
 			Address  a = this.player.getEngine().getWorld()[I][J];
+			
+			for(int y = 0 ; y<this.player.getEngine().getEmergencyUnits().size() ; y++) {
+				if(this.player.getEngine().getEmergencyUnits().get(y).getLocation().equals(a)) {
+					total+= " \n Units Parked here INFO : " +  this.player.getEngine().getEmergencyUnits().get(y).getInfo();
+				}
+			}
+			
 			for(int p =0;p<this.player.getVisibleBuildings().size() ; p++) {
 				if(this.player.getVisibleBuildings().get(p).getLocation().equals(a)) {
 					total+=this.player.getVisibleBuildings().get(p).getInfo() + " \n Citizens INFO:  \n" ;
@@ -521,8 +533,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 							total+= "Units Parked here INFO : " +  this.player.getEngine().getEmergencyUnits().get(y).getInfo();
 						}
 					}
-					infoPanelText.setText(total);
-					infoPanelText.setVisible(true);
+					
 					System.out.println();
 					break;
 				}
@@ -536,12 +547,13 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 							total+= "Units here INFO : " +  this.player.getEngine().getEmergencyUnits().get(y).getInfo();
 						}
 					}
-					infoPanelText.setText(total);
-					infoPanelText.setVisible(true);
+					
 					break;
 				}
 			}
 			
+			infoPanelText.setText(total);
+			infoPanelText.setVisible(true);
 			
 		}
 		

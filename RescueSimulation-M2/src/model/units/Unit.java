@@ -230,7 +230,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 			x+= "Unit type : DiseaseControlUnit \n";
 		}
 		if(this instanceof FireTruck) {
-			x+= "Unit type : FireTruck";
+			x+= "Unit type : FireTruck \n";
 		}
 		if(this instanceof GasControlUnit) {
 			x+= "Unit type : GasControlUnit";
