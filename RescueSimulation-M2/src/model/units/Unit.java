@@ -1,5 +1,7 @@
 package model.units;
 
+import exceptions.CannotTreatException;
+import exceptions.IncompatibleTargetException;
 import model.disasters.Collapse;
 import model.disasters.Disaster;
 import model.events.SOSResponder;
@@ -70,13 +72,32 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	}
 
 	@Override
-	public void respond(Rescuable r) {
+	public void respond(Rescuable r) throws IncompatibleTargetException, CannotTreatException{ 
 
 		if (target != null && state == UnitState.TREATING)
 			reactivateDisaster();
 		if(this.canTreat(r))
-		finishRespond(r);
-
+		if(!this.canTreat(r)) {
+			throw new CannotTreatException(this, r, "cannot");
+		}
+		
+		
+		if(this instanceof Ambulance || this instanceof DiseaseControlUnit) {
+				if(r instanceof ResidentialBuilding) {
+					throw new IncompatibleTargetException(this, r, "cannot");
+				}
+				else if(this instanceof GasControlUnit || this instanceof PoliceUnit || this instanceof FireTruck) {
+					if(r instanceof Citizen)
+						throw new IncompatibleTargetException(this, r, "cannot");
+				}
+				else {
+					finishRespond(r);
+				}
+					
+			}
+		
+		
+		
 	}
 
 	public void reactivateDisaster() {

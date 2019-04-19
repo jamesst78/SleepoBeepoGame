@@ -1,5 +1,10 @@
 package model.disasters;
 
+import exceptions.BuildingAlreadyCollapsedException;
+import exceptions.CitizenAlreadyDeadException;
+import model.infrastructure.ResidentialBuilding;
+import model.people.Citizen;
+import model.people.CitizenState;
 import simulation.Rescuable;
 import simulation.Simulatable;
 
@@ -25,11 +30,29 @@ public abstract class Disaster implements Simulatable{
 	public Rescuable getTarget() {
 		return target;
 	}
-	public void strike() 
-	{
+	public void strike() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException{
+		if(this.getTarget() instanceof Citizen) {
+			Citizen f = (Citizen)this.getTarget();
+			if(f.getState().equals(CitizenState.DECEASED)) {
+				throw new CitizenAlreadyDeadException(this, "Let the human RIP") ;
+			}
+			else {
+				target.struckBy(this);
+				active=true;
+			}
+		}
+		if(this.getTarget() instanceof ResidentialBuilding) {
+			ResidentialBuilding k = (ResidentialBuilding)this.getTarget();
+			if(k.getFoundationDamage() == 100) {
+				throw new BuildingAlreadyCollapsedException(this, "Building already gone") ;
+			}
+			else {
+				target.struckBy(this);
+				active=true;
+			}
+			
+		}
 		
-		target.struckBy(this);
-		active=true;
 	}
 	public boolean isInText() {
 		return inText;

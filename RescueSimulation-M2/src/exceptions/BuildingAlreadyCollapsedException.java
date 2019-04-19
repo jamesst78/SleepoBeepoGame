@@ -2,7 +2,7 @@ package exceptions;
 
 import model.disasters.Disaster;
 
-public abstract class BuildingAlreadyCollapsedException extends DisasterException{
+public class BuildingAlreadyCollapsedException extends DisasterException{
 
 	public BuildingAlreadyCollapsedException(Disaster disaster) {
 		super(disaster);

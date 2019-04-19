@@ -1,5 +1,7 @@
 package model.disasters;
 
+import exceptions.BuildingAlreadyCollapsedException;
+import exceptions.CitizenAlreadyDeadException;
 import model.infrastructure.ResidentialBuilding;
 
 
@@ -9,7 +11,7 @@ public class Collapse extends Disaster {
 		super(startCycle, target);
 		
 	}
-	public void strike() 
+	public void strike() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException 
 	{
 		ResidentialBuilding target= (ResidentialBuilding)getTarget();	
 		target.setFoundationDamage(target.getFoundationDamage()+10);

@@ -1,5 +1,7 @@
 package model.disasters;
 
+import exceptions.BuildingAlreadyCollapsedException;
+import exceptions.CitizenAlreadyDeadException;
 import model.people.Citizen;
 
 
@@ -9,7 +11,7 @@ public class Infection extends Disaster {
 		super(startCycle, target);
 	}
 @Override
-public void strike() 
+public void strike() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException 
 {
 	Citizen target = (Citizen)getTarget();
 	target.setToxicity(target.getToxicity()+25);

@@ -1,5 +1,7 @@
 package model.disasters;
 
+import exceptions.BuildingAlreadyCollapsedException;
+import exceptions.CitizenAlreadyDeadException;
 import model.infrastructure.ResidentialBuilding;
 
 
@@ -10,7 +12,7 @@ public class GasLeak extends Disaster {
 	}
 	
 	@Override
-	public void strike() 
+	public void strike() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException 
 	{
 		
 		ResidentialBuilding target= (ResidentialBuilding)getTarget();

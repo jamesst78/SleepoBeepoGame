@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import exceptions.BuildingAlreadyCollapsedException;
+import exceptions.CitizenAlreadyDeadException;
 import model.disasters.Collapse;
 import model.disasters.Disaster;
 import model.disasters.Fire;
@@ -202,7 +204,7 @@ public class Simulator implements WorldListener {
 		this.emergencyService = emergency;
 	}
 
-	public void nextCycle() {
+	public void nextCycle() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException {
 
 		currentCycle++;
 
@@ -254,7 +256,7 @@ public class Simulator implements WorldListener {
 
 	}
 
-	private void handleGas(Disaster d) {
+	private void handleGas(Disaster d) throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException {
 		ResidentialBuilding b = (ResidentialBuilding) d.getTarget();
 		if (b.getFireDamage() != 0) {
 			b.setFireDamage(0);
@@ -267,7 +269,7 @@ public class Simulator implements WorldListener {
 		}
 	}
 
-	private void handleFire(Disaster d) {
+	private void handleFire(Disaster d) throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException {
 		ResidentialBuilding b = (ResidentialBuilding) d.getTarget();
 		if (b.getGasLevel() == 0) {
 			d.strike();
