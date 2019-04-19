@@ -76,25 +76,27 @@ public abstract class Unit implements Simulatable, SOSResponder {
 
 		if (target != null && state == UnitState.TREATING)
 			reactivateDisaster();
-		if(this.canTreat(r))
+		
 		if(!this.canTreat(r)) {
 			throw new CannotTreatException(this, r, "cannot");
 		}
-		
-		
+		else
+		if(this.canTreat(r))
 		if(this instanceof Ambulance || this instanceof DiseaseControlUnit) {
 				if(r instanceof ResidentialBuilding) {
 					throw new IncompatibleTargetException(this, r, "cannot");
+					
 				}
+				else {
+					
+				}
+		}
 				else if(this instanceof GasControlUnit || this instanceof PoliceUnit || this instanceof FireTruck) {
 					if(r instanceof Citizen)
 						throw new IncompatibleTargetException(this, r, "cannot");
-				}
-				else {
-					finishRespond(r);
-				}
-					
-			}
+				}	
+			
+		finishRespond(r);
 		
 		
 		
@@ -154,7 +156,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 				else
 					return true;
 			}
-			if(this instanceof FireUnit) {
+			if(this instanceof FireTruck) {
 				if(b.getFireDamage() ==0)
 					return false;
 				else
@@ -163,7 +165,9 @@ public abstract class Unit implements Simulatable, SOSResponder {
 			else {
 				if(b.getDisaster() instanceof Collapse && b.getDisaster().isActive()==true)
 					return true;
-				return false;
+				else{
+					return false;
+				}
 					
 			}
 		}

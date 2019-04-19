@@ -30,9 +30,13 @@ import javax.swing.text.AttributeSet.FontAttribute;
 
 import controller.CommandCenter;
 import exceptions.BuildingAlreadyCollapsedException;
+import exceptions.CannotTreatException;
 import exceptions.CitizenAlreadyDeadException;
+import exceptions.IncompatibleTargetException;
+import model.disasters.Disaster;
 import model.units.UnitState;
 import simulation.Address;
+import simulation.Rescuable;
 
 public class GUI extends JFrame implements ActionListener , EventListener {
 	JPanel rightPanel;
@@ -52,12 +56,14 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 	JPanel AvailableUnits;
 	JPanel RespondingUnits;
 	JPanel TreatingUnits;
+	JPanel nCycles;
 	JTextArea infoPanelText;
 	JTextArea logPanelText;
-	JTextArea t3;
-	JTextArea t4;
+	JTextArea nCyclesText;
+	JTextArea currentDisastersText;
 	JTextArea t5;
 	JScrollPane scroll;
+	JScrollPane scroll2;
 	
 	JOptionPane TargetSelect;
 	CommandCenter player;
@@ -67,10 +73,13 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 	ArrayList<JButton> AvailableUnitsArrayButtons = new ArrayList<>();
 	ArrayList<JButton> RespondingUnitsArrayButtons = new ArrayList<>();
 	ArrayList<JButton> TreatingUnitsArrayButtons = new ArrayList<>();
-	
+	ArrayList<JButton> JOptionButtons = new ArrayList<>();
+	Rescuable toBeRescued;
 	JButton nextCycleButton;
 	Object [] inThisLocation;
 	GUI gui;
+	Boolean targetIsSelected = false;
+	String targetData = "";
 
 	public GUI() throws Exception{
 		this.player = new CommandCenter();
@@ -105,6 +114,10 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		 TreatingUnits = new JPanel();
 		 this.gui = this;
 		 scroll = new JScrollPane(infoPanelText);
+		 nCycles = new JPanel();
+		 nCyclesText = new JTextArea();
+		 currentDisastersText = new JTextArea();
+		 scroll2 = new JScrollPane(currentDisastersText);
 		
 		 
 		
@@ -120,10 +133,26 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		
 		
 		midPanel.setPreferredSize(sizing.getSize());
-		midPanel.setBackground(Color.GRAY);
+		midPanel.setBackground(Color.red);
 		mapPanel.setPreferredSize(d2);
 		mapPanel.setBackground(Color.darkGray);
 		midPanel.add(mapPanel , BorderLayout.NORTH);
+		midPanel.add(nCycles , BorderLayout.EAST);
+		nCycles.setPreferredSize(new Dimension(200,90));
+		nCyclesText.setPreferredSize(new Dimension(50,50));
+		nCycles.add(nCyclesText , BorderLayout.CENTER);
+		nCyclesText.setText("\n   0");
+		nCyclesText.setForeground(Color.blue);
+		nCyclesText.setFont(new Font("Ariel" , Font.BOLD , 15));
+		
+		JLabel hamada = new JLabel("Cycles Passed");
+		hamada.setVisible(true);
+		hamada.setForeground(Color.BLACK);
+		hamada.setBackground(Color.LIGHT_GRAY);
+		nCycles.add(hamada, BorderLayout.WEST);
+		
+		
+		
 		
 		
 		infoPanel.setPreferredSize(new Dimension (300,300));
@@ -149,7 +178,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		infoPanel.add(textPanel , BorderLayout.SOUTH);
 		leftPanel.add(infoPanel , BorderLayout.NORTH);
 		
-		logPanel.setPreferredSize(new Dimension(300,200));
+		logPanel.setPreferredSize(new Dimension(300,150));
 		logPanel.setBackground(Color.BLACK);
 		JLabel log = new JLabel("Events Log");
 		log.setForeground(Color.WHITE);
@@ -157,11 +186,17 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		leftPanel.add(logPanel , BorderLayout.CENTER);
 		
 		
-		cyclePanel.setPreferredSize(new Dimension(300,100));
+		cyclePanel.setPreferredSize(new Dimension(300,150));
 		cyclePanel.setBackground(Color.BLACK);
-		JLabel cycle = new JLabel("Cycles Count:");
+		JLabel cycle = new JLabel("Disasters currently happening : ");
+		scroll2.setPreferredSize(new Dimension(290,70));
+		scroll2.setVisible(true);
+		scroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		cycle.setForeground(Color.WHITE);
+		currentDisastersText.setBackground(Color.BLACK);
+		currentDisastersText.setForeground(Color.WHITE);
 		cyclePanel.add(cycle, BorderLayout.NORTH);
+		cyclePanel.add(scroll2,BorderLayout.SOUTH);
 		leftPanel.add(cyclePanel , BorderLayout.SOUTH);
 		
 		
@@ -209,7 +244,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		buttonsOfMapPanel.setLayout(new GridLayout(10,10));
 		mapPanel.add(buttonsOfMapPanel , BorderLayout.NORTH);
 		mapPanel.setBackground(Color.YELLOW);
-		buttonsOfMapPanel.setBackground(Color.gray);
+		buttonsOfMapPanel.setBackground(Color.yellow);
 		
 		
 		for(int i = 0; i < this.player.getEngine().getEmergencyUnits().size(); i++) {
@@ -307,6 +342,8 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 			catch(CitizenAlreadyDeadException | BuildingAlreadyCollapsedException e1){
 				e1.printStackTrace();
 			}
+			String cycleCount = player.getEngine().getCurrentCycle() + "";
+			nCyclesText.setText("\n  " +cycleCount );
 			logPanelText.setText(this.player.getEngine().eventsJustHappened());
 			logPanelText.setVisible(true);
 			
@@ -451,6 +488,16 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 					
 				}
 			}
+			String k = "";
+			for(int w= 0 ; w<this.player.getEngine().getExecutedDisasters().size();w++) {
+				
+				if(this.player.getEngine().getExecutedDisasters().get(w).isActive()) {
+					Disaster d = this.player.getEngine().getExecutedDisasters().get(w);
+					k+= "Disaster " + d.toString() + " Is Active on a Target at location " + d.getTarget().getLocation().getX() +
+							"," + d.getTarget().getLocation().getY() + "\n";
+				}
+			}
+			currentDisastersText.setText(k);
 			
 			
 			
@@ -497,6 +544,80 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 			
 			
 		}
+		
+		if(JOptionButtons.contains(temp)) {
+			for(int j = 0; j <JOptionButtons.size(); j++) {
+				if(temp.equals(JOptionButtons.get(j))){
+					targetData = JOptionButtons.get(j).getName();
+					targetIsSelected = true;
+				}
+				if(targetData.contains(",")) {
+					for(int k = 0; k < player.getVisibleBuildings().size(); k++) {
+						String check = player.getVisibleBuildings().get(k).getLocation().getX() + "," + 
+								player.getVisibleBuildings().get(k).getLocation().getY();		
+						if(targetData.equals(check)) {
+							toBeRescued = player.getVisibleBuildings().get(k);
+						}
+					}
+				}
+				else {
+					for(int k = 0; k <player.getVisibleCitizens().size();k++) {
+						String check = player.getVisibleCitizens().get(k).getNationalID();
+						if(targetData.equals(check)) {
+							toBeRescued = player.getVisibleCitizens().get(k);
+						}
+					}
+				}
+				
+			}
+		}
+		if(unitsButtons.contains(temp)) {
+			if(targetIsSelected) {
+				for(int j = 0; j < player.getEngine().getEmergencyUnits().size();j++) {
+					if(player.getEngine().getEmergencyUnits().get(j).getUnitID().equals(temp.getName())) {
+						try {
+							player.getEngine().getEmergencyUnits().get(j).respond(toBeRescued);
+						} catch (IncompatibleTargetException | CannotTreatException e1) {
+							e1.printStackTrace();
+						}
+						targetIsSelected = false;
+					}
+				}
+			
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 	
