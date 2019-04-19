@@ -4,6 +4,7 @@ import exceptions.CannotTreatException;
 import exceptions.IncompatibleTargetException;
 import model.disasters.Collapse;
 import model.disasters.Disaster;
+import model.disasters.Injury;
 import model.events.SOSResponder;
 import model.events.WorldListener;
 import model.infrastructure.ResidentialBuilding;
@@ -82,18 +83,40 @@ public abstract class Unit implements Simulatable, SOSResponder {
 		}
 		else
 		if(this.canTreat(r))
-		if(this instanceof Ambulance || this instanceof DiseaseControlUnit) {
+		if(this instanceof Ambulance) {
 				if(r instanceof ResidentialBuilding) {
 					throw new IncompatibleTargetException(this, r, "cannot");
 					
 				}
 				else {
-					
+					Citizen c = (Citizen)r;
+					if(!(r.getDisaster() instanceof Injury)) {
+						throw new IncompatibleTargetException(this, r, "cannot");
+					}
 				}
 		}
-				else if(this instanceof GasControlUnit || this instanceof PoliceUnit || this instanceof FireTruck) {
+		if( this instanceof DiseaseControlUnit) {
+			if(r instanceof ResidentialBuilding) {
+				throw new IncompatibleTargetException(this, r, "cannot");
+				
+			}
+			else {
+				
+			}
+	}
+				else {
+					if(this instanceof GasControlUnit ) {
 					if(r instanceof Citizen)
 						throw new IncompatibleTargetException(this, r, "cannot");
+					}
+					if( this instanceof PoliceUnit ) {
+						if(r instanceof Citizen)
+							throw new IncompatibleTargetException(this, r, "cannot");
+						}
+					if( this instanceof FireTruck) {
+						if(r instanceof Citizen)
+							throw new IncompatibleTargetException(this, r, "cannot");
+						}
 				}	
 			
 		finishRespond(r);
