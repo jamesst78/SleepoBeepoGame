@@ -29,6 +29,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.text.AttributeSet.FontAttribute;
 
 import controller.CommandCenter;
+import exceptions.BuildingAlreadyCollapsedException;
+import exceptions.CitizenAlreadyDeadException;
 import model.units.UnitState;
 import simulation.Address;
 
@@ -302,8 +304,8 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 			try {
 			player.getEngine().nextCycle();
 			}
-			catch(Exception t){
-				
+			catch(CitizenAlreadyDeadException | BuildingAlreadyCollapsedException e1){
+				e1.printStackTrace();
 			}
 			logPanelText.setText(this.player.getEngine().eventsJustHappened());
 			logPanelText.setVisible(true);
