@@ -179,7 +179,7 @@ public class Citizen implements Rescuable,Simulatable{
 		x+= "BloodLoss : " + this.getBloodLoss() + "\n";
 		x+= "Toxicity : " + this.getToxicity() + "\n";
 		x+= "CitizenState : " + this.getState() + "\n";
-		if(this.getDisaster().isActive()) {
+		if(this.getDisaster()!= null &&  this.getDisaster().isActive() ) {
 		x+= "Disaster : " + this.getDisaster().toString() + "\n";
 		}
 		return x;		

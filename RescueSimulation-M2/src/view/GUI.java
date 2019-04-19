@@ -16,13 +16,16 @@ import java.util.EventListener;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.text.AttributeSet.FontAttribute;
 
 import controller.CommandCenter;
@@ -52,6 +55,8 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 	JTextArea t3;
 	JTextArea t4;
 	JTextArea t5;
+	JScrollPane scroll;
+	
 	JOptionPane TargetSelect;
 	CommandCenter player;
 	ArrayList<JButton> buttonsOfMap = new ArrayList<>();
@@ -97,6 +102,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		 RespondingUnits = new JPanel();
 		 TreatingUnits = new JPanel();
 		 this.gui = this;
+		 scroll = new JScrollPane(infoPanelText);
 		
 		 
 		
@@ -121,8 +127,14 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		infoPanel.setPreferredSize(new Dimension (300,300));
 		textPanel.setPreferredSize(new Dimension(300,260));
 		infoPanel.setBackground(Color.BLACK);
-		textPanel.add(infoPanelText, BorderLayout.SOUTH);
-		infoPanelText.setMaximumSize(new Dimension(300,260));
+		textPanel.add(scroll);
+		
+		scroll.setVisible(true);
+		scroll.setPreferredSize(new Dimension(290,250));
+		scroll.setBackground(Color.black);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		
 		infoPanelText.setBackground(Color.black);
 		infoPanelText.setForeground(Color.WHITE);
 		textPanel.setBackground(Color.black);
@@ -221,7 +233,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 					
 				}
 				public void mouseExited(java.awt.event.MouseEvent evt) {
-					
+					infoPanelText.setText("");
 				}
 			});
 			AvailableUnits.add(b2);
@@ -287,17 +299,24 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		}
 		temp = allButtons.get(i);
 		if(temp.equals(nextCycleButton)) {
+			try {
 			player.getEngine().nextCycle();
+			}
+			catch(Exception t){
+				
+			}
 			logPanelText.setText(this.player.getEngine().eventsJustHappened());
 			logPanelText.setVisible(true);
 			
 			for( i = 0; i<player.getVisibleBuildings().size() ; i++) {
+				System.out.println(i);
 				if(!player.getVisibleBuildings().get(i).isIconAlreadySet()) {
 					String p = player.getVisibleBuildings().get(i).getLocation().getX()+ ""+player.getVisibleBuildings().get(i)
 							.getLocation().getY();
 					
 					for(int j = 0 ; j<buttonsOfMap.size() ; j++) {
 						if(buttonsOfMap.get(j).getName().equals(p)) {
+							System.out.println("i got here");
 							Random r = new Random();
 							String theChosen = "";
 							int x = r.nextInt(4) +1;
@@ -440,18 +459,35 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 			int I = u/10;
 			int J = u%10;
 			System.out.println(I);
+			String total = "";
 			Address  a = this.player.getEngine().getWorld()[I][J];
 			for(int p =0;p<this.player.getVisibleBuildings().size() ; p++) {
 				if(this.player.getVisibleBuildings().get(p).getLocation().equals(a)) {
-					infoPanelText.setText(this.player.getVisibleBuildings().get(p).getInfo());
+					total+=this.player.getVisibleBuildings().get(p).getInfo() + " \n Citizens INFO:  \n" ;
+					for(int h = 0 ; h<this.player.getVisibleBuildings().get(p).getOccupants().size() ; h++) {
+						total+= this.player.getVisibleBuildings().get(p).getOccupants().get(h).getInfo() + "\n ";
+					}
+					for(int y = 0 ; y<this.player.getEngine().getEmergencyUnits().size() ; y++) {
+						if(this.player.getEngine().getEmergencyUnits().get(y).getLocation().equals(a)) {
+							total+= "Units Parked here INFO : " +  this.player.getEngine().getEmergencyUnits().get(y).getInfo();
+						}
+					}
+					infoPanelText.setText(total);
 					infoPanelText.setVisible(true);
-					System.out.println("i got here");
+					System.out.println();
 					break;
 				}
 			}
 			for(int r = 0 ; r<player.getVisibleCitizens().size(); r++) {
 				if(this.player.getVisibleCitizens().get(r).getLocation().equals(a)) {
-					infoPanelText.setText(this.player.getVisibleCitizens().get(r).getInfo());
+					
+					total+= this.player.getVisibleCitizens().get(r).getInfo();
+					for(int y = 0 ; y<this.player.getEngine().getEmergencyUnits().size() ; y++) {
+						if(this.player.getEngine().getEmergencyUnits().get(y).getLocation().equals(a)) {
+							total+= "Units here INFO : " +  this.player.getEngine().getEmergencyUnits().get(y).getInfo();
+						}
+					}
+					infoPanelText.setText(total);
 					infoPanelText.setVisible(true);
 					break;
 				}
