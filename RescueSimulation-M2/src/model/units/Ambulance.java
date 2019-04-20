@@ -54,8 +54,9 @@ public class Ambulance extends MedicalUnit {
 		if (getTarget() != null && ((Citizen) getTarget()).getBloodLoss() > 0
 				&& getState() == UnitState.TREATING) {
 			reactivateDisaster();
-		finishRespond(r);
+		
 	}
+		finishRespond(r);
 	}
 	
 

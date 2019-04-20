@@ -51,9 +51,8 @@ public class DiseaseControlUnit extends MedicalUnit {
 		}
 		if (getTarget() != null && ((Citizen) getTarget()).getToxicity() > 0
 				&& getState() == UnitState.TREATING) {
-			reactivateDisaster();
-		finishRespond(r);
+			reactivateDisaster();		
 	}
-
+			finishRespond(r);
 }
 }

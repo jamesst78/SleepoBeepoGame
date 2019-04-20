@@ -282,7 +282,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 					
 				}
 				public void mouseExited(java.awt.event.MouseEvent evt) {
-					infoPanelText.setText("");
+					
 				}
 			});
 			AvailableUnits.add(b2);
@@ -702,10 +702,11 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 //		}
 		if(unitsButtons.contains(temp)) {
 			if(targetIsSelected) {
-				System.out.println("I got here ya yuka");
+				
 				for(int j = 0; j < player.getEngine().getEmergencyUnits().size();j++) {
 					if(player.getEngine().getEmergencyUnits().get(j).getUnitID().equals(temp.getName())) {
 						try {
+							System.out.println(temp.getName());
 							player.getEngine().getEmergencyUnits().get(j).respond(toBeRescued);
 						} catch (IncompatibleTargetException | CannotTreatException e1) {
 							
