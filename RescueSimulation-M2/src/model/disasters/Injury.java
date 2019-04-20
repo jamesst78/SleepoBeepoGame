@@ -3,6 +3,7 @@ package model.disasters;
 import exceptions.BuildingAlreadyCollapsedException;
 import exceptions.CitizenAlreadyDeadException;
 import model.people.Citizen;
+import model.people.CitizenState;
 
 
 public class Injury extends Disaster {
@@ -14,6 +15,9 @@ public class Injury extends Disaster {
 	public void strike() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException 
 	{
 		Citizen target = (Citizen)getTarget();
+		if(target.getState().equals(CitizenState.DECEASED)) {
+			throw new CitizenAlreadyDeadException(this, "Let the human RIP") ;
+		}
 		target.setBloodLoss(target.getBloodLoss()+30);
 		super.strike();
 	}

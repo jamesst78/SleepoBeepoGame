@@ -15,6 +15,9 @@ public class Collapse extends Disaster {
 	{
 		ResidentialBuilding target= (ResidentialBuilding)getTarget();	
 		target.setFoundationDamage(target.getFoundationDamage()+10);
+		if(target.getFoundationDamage() == 100) {
+			throw new BuildingAlreadyCollapsedException(this, "Building already gone") ;
+		}
 		super.strike();
 	}
 	public void cycleStep()

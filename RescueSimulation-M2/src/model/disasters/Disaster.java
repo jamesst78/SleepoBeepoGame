@@ -49,8 +49,9 @@ public abstract class Disaster implements Simulatable{
 			else {
 				target.struckBy(this);
 				active=true;
-			}
 			
+			
+		}
 		}
 		
 	}

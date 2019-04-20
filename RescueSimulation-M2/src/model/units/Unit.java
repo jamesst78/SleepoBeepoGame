@@ -164,37 +164,37 @@ public abstract class Unit implements Simulatable, SOSResponder {
 	}
 	
 	public boolean canTreat(Rescuable r) {
-		if(r instanceof Citizen) {
-			Citizen c = (Citizen)r;
-			if(c.getState().equals(CitizenState.RESCUED))
-				return false;
-			else
-				return true;
-		}
-		else {
+		
+			if(r instanceof Citizen) {
+				Citizen c = (Citizen)r;
+				if(this instanceof Ambulance) {
+					if(c.getBloodLoss() == 0)
+						return false;			
+				}
+				if(this instanceof DiseaseControlUnit) {
+					if(c.getToxicity() == 0) 
+						return false;
+				}
+			}
+			else {
 			ResidentialBuilding b = (ResidentialBuilding)r;
 			if(this instanceof GasControlUnit) {
 				if(b.getGasLevel() ==0)
 					return false;
-				else
-					return true;
 			}
 			if(this instanceof FireTruck) {
 				if(b.getFireDamage() ==0)
 					return false;
-				else
-					return true;
 			}
-			else {
-				if(b.getDisaster() instanceof Collapse && b.getDisaster().isActive()==true)
-					return true;
-				else{
+			if(this instanceof Evacuator){
+				if(b.getFoundationDamage() == 0)
 					return false;
 				}
 					
 			}
+			return true;
 		}
-	}
+	
 	public String getInfo() {
 		String x = "";
 		

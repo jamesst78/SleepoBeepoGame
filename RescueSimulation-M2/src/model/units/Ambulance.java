@@ -1,6 +1,10 @@
 package model.units;
 
+import exceptions.CannotTreatException;
+import exceptions.IncompatibleTargetException;
+import model.disasters.Infection;
 import model.events.WorldListener;
+import model.infrastructure.ResidentialBuilding;
 import model.people.Citizen;
 import model.people.CitizenState;
 import simulation.Address;
@@ -33,11 +37,26 @@ public class Ambulance extends MedicalUnit {
 
 	}
 
-	public void respond(Rescuable r) {
+	public void respond(Rescuable r) throws IncompatibleTargetException, CannotTreatException {
+
+		if(r instanceof ResidentialBuilding) {
+			throw new IncompatibleTargetException(this, r, "cannot");
+		}
+		if(r.getDisaster() instanceof Infection) {
+			throw new CannotTreatException(this, r, "cannot");
+		}
+		if(!this.canTreat(r)) {
+			throw new CannotTreatException(this, r, "cannot");
+		}
+		if(((Citizen)r).getHp() == 0) {
+			throw new CannotTreatException(this, r, "Already dead");
+		}
 		if (getTarget() != null && ((Citizen) getTarget()).getBloodLoss() > 0
-				&& getState() == UnitState.TREATING)
+				&& getState() == UnitState.TREATING) {
 			reactivateDisaster();
 		finishRespond(r);
 	}
+	}
+	
 
 }
