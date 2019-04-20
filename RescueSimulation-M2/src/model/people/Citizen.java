@@ -186,5 +186,8 @@ public class Citizen implements Rescuable,Simulatable{
 		
 		
 	}
+	public String toString() {
+		return("Citizen of name : " + this.getName());
+	}
 	
 }

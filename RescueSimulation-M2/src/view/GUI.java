@@ -34,6 +34,7 @@ import exceptions.CannotTreatException;
 import exceptions.CitizenAlreadyDeadException;
 import exceptions.IncompatibleTargetException;
 import model.disasters.Disaster;
+import model.infrastructure.ResidentialBuilding;
 import model.units.UnitState;
 import simulation.Address;
 import simulation.Rescuable;
@@ -85,7 +86,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		this.player = new CommandCenter();
 		this.setResizable(false);
 		this.setTitle("Rescue Simulation By Yuka Engy Muhad");
-		this.setSize(1200, 600);
+		this.setSize(1200, 700);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		JPanel sizing = new JPanel();
@@ -134,15 +135,17 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		
 		midPanel.setPreferredSize(sizing.getSize());
 		midPanel.setBackground(Color.red);
-		mapPanel.setPreferredSize(d2);
+		mapPanel.setPreferredSize(new Dimension(600,620));
 		mapPanel.setBackground(Color.darkGray);
 		midPanel.add(mapPanel , BorderLayout.NORTH);
 		midPanel.add(nCycles , BorderLayout.EAST);
 		nCycles.setPreferredSize(new Dimension(200,90));
 		nCyclesText.setPreferredSize(new Dimension(50,50));
 		nCycles.add(nCyclesText , BorderLayout.CENTER);
-		nCyclesText.setText("\n   0");
-		nCyclesText.setForeground(Color.blue);
+		nCycles.setBackground(Color.GREEN);
+		nCyclesText.setText("\n  0");
+		nCyclesText.setForeground(Color.ORANGE);
+		nCyclesText.setBackground(Color.black);
 		nCyclesText.setFont(new Font("Ariel" , Font.BOLD , 15));
 		
 		JLabel hamada = new JLabel("Cycles Passed");
@@ -208,6 +211,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		avaliableUnitsPanel.setBackground(Color.LIGHT_GRAY);
 		rightPanel.add(avaliableUnitsPanel);
 		AvailableUnits.setPreferredSize(new Dimension(290,190));
+		AvailableUnits.setBackground(Color.black);
 		avaliableUnitsPanel.add(AvailableUnits, BorderLayout.SOUTH);
 		
 		
@@ -218,6 +222,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		respondingUnitsPanel.setBackground(Color.LIGHT_GRAY);
 		rightPanel.add(respondingUnitsPanel);
 		RespondingUnits.setPreferredSize(new Dimension(290,190));
+		RespondingUnits.setBackground(Color.black);
 		respondingUnitsPanel.add(RespondingUnits, BorderLayout.SOUTH);
 		
 		
@@ -228,6 +233,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		treatingUnitsPanel.setBackground(Color.LIGHT_GRAY);
 		rightPanel.add(treatingUnitsPanel);
 		TreatingUnits.setPreferredSize(new Dimension(290,190));
+		TreatingUnits.setBackground(Color.black);
 		treatingUnitsPanel.add(TreatingUnits, BorderLayout.SOUTH);
 		
 		
@@ -240,17 +246,18 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		
 		
 		//working on the array of buttons
-		buttonsOfMapPanel.setPreferredSize(new Dimension(600,500));
+		buttonsOfMapPanel.setPreferredSize(new Dimension(600,620));
 		buttonsOfMapPanel.setLayout(new GridLayout(10,10));
 		mapPanel.add(buttonsOfMapPanel , BorderLayout.NORTH);
 		mapPanel.setBackground(Color.YELLOW);
-		buttonsOfMapPanel.setBackground(Color.yellow);
+		buttonsOfMapPanel.setBackground(new Color(102, 51, 0));
 		
 		
 		for(int i = 0; i < this.player.getEngine().getEmergencyUnits().size(); i++) {
 			String t = this.player.getEngine().getEmergencyUnits().get(i).getUnitID();
-			JButton b2 = new JButton("Unit");
+			JButton b2 = new JButton(t);
 			b2.setName(t);
+			b2.addActionListener(this);
 			this.allButtons.add(b2);
 			this.unitsButtons.add(b2);
 			b2.addMouseListener(new java.awt.event.MouseAdapter(){
@@ -262,6 +269,8 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 									if(gui.player.getEngine().getEmergencyUnits().get(u).getUnitID().equals(unitsButtons.get(r).getName())) {
 										infoPanelText.setText(gui.player.getEngine().getEmergencyUnits().get(u).getInfo());
 										infoPanelText.setVisible(true);
+										infoPanelText.setFont(new Font("Ariel" , Font.BOLD,13));
+										infoPanelText.setForeground(Color.ORANGE);
 									}
 								}
 							}
@@ -288,12 +297,13 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 				    
 				   //b1.setBackground(Color.BLACK);
 				    
-				  
+				//ImageIcon  img2 = new ImageIcon("terrain.png"); 
 				b1.setName(i +""+ j);
 				b1.setBorder(null);
 				b1.setOpaque(true);
 				b1.setContentAreaFilled(false);
 				b1.setBorderPainted(false);
+				//b1.setIcon(img2);
 				buttonsOfMap.add(b1);
 				allButtons.add(b1);
 				b1.addActionListener(this);
@@ -311,6 +321,10 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		
 		nextCycleButton = new JButton("Next Cycle");
 		nextCycleButton.addActionListener(this);
+		nextCycleButton.setPreferredSize(new Dimension(150,90));
+		nextCycleButton.setBackground(Color.ORANGE);
+		ImageIcon  img2 = new ImageIcon("next.png");
+		nextCycleButton.setIcon(img2);
 		allButtons.add(nextCycleButton);
 		midPanel.add(nextCycleButton, BorderLayout.SOUTH);
 		infoPanelText.setSize(new Dimension(300,300));
@@ -341,6 +355,9 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		}
 		temp = allButtons.get(i);
 		if(temp.equals(nextCycleButton)) {
+			RespondingUnits.repaint();
+			AvailableUnits.repaint();
+			TreatingUnits.repaint();
 			try {
 			player.getEngine().nextCycle();
 			}
@@ -348,8 +365,11 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 				e1.printStackTrace();
 			}
 			String cycleCount = player.getEngine().getCurrentCycle() + "";
-			nCyclesText.setText("\n  " +cycleCount );
+			nCyclesText.setText("   " +cycleCount );
+			nCyclesText.setFont(new Font("Ariel" , Font.BOLD,16));
 			logPanelText.setText(this.player.getEngine().eventsJustHappened());
+			logPanelText.setFont(new Font("Ariel" , Font.BOLD,13));
+			logPanelText.setForeground(Color.ORANGE);
 			logPanelText.setVisible(true);
 			
 			for( i = 0; i<player.getVisibleBuildings().size() ; i++) {
@@ -438,12 +458,19 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 							AvailableUnitsArrayButtons.remove(current);
 							RespondingUnits.add(current);
 							RespondingUnitsArrayButtons.add(current);
+							RespondingUnits.repaint();
+							AvailableUnits.repaint();
+							TreatingUnits.repaint();
+							
 						}
 						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.TREATING)) {
 							AvailableUnits.remove(current);
 							AvailableUnitsArrayButtons.remove(current);
 							TreatingUnits.add(current);
 							TreatingUnitsArrayButtons.add(current);
+							RespondingUnits.repaint();
+							AvailableUnits.repaint();
+							TreatingUnits.repaint();
 						}
 					}
 					
@@ -460,12 +487,18 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 							RespondingUnitsArrayButtons.remove(current);
 							AvailableUnits.add(current);
 							AvailableUnitsArrayButtons.add(current);
+							RespondingUnits.repaint();
+							AvailableUnits.repaint();
+							TreatingUnits.repaint();
 						}
 						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.TREATING)) {
 							RespondingUnits.remove(current);
 							RespondingUnitsArrayButtons.remove(current);
 							TreatingUnits.add(current);
 							TreatingUnitsArrayButtons.add(current);
+							RespondingUnits.repaint();
+							AvailableUnits.repaint();
+							TreatingUnits.repaint();
 						}
 					}
 					
@@ -482,12 +515,18 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 							TreatingUnitsArrayButtons.remove(current);
 							AvailableUnits.add(current);
 							AvailableUnitsArrayButtons.add(current);
+							RespondingUnits.repaint();
+							AvailableUnits.repaint();
+							TreatingUnits.repaint();
 						}
 						if(this.player.getEngine().getEmergencyUnits().get(r).getState().equals(UnitState.RESPONDING)) {
 							TreatingUnits.remove(current);
 							TreatingUnitsArrayButtons.remove(current);
 							RespondingUnits.add(current);
 							RespondingUnitsArrayButtons.add(current);
+							RespondingUnits.repaint();
+							AvailableUnits.repaint();
+							TreatingUnits.repaint();
 						}
 					}
 					
@@ -553,44 +592,108 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 			}
 			
 			infoPanelText.setText(total);
+			infoPanelText.setFont(new Font("Ariel" , Font.BOLD,13));
+			infoPanelText.setForeground(Color.ORANGE);
 			infoPanelText.setVisible(true);
 			
-		}
+			
+			
+			//here we create a JOption
 		
-		if(JOptionButtons.contains(temp)) {
-			for(int j = 0; j <JOptionButtons.size(); j++) {
-				if(temp.equals(JOptionButtons.get(j))){
-					targetData = JOptionButtons.get(j).getName();
-					targetIsSelected = true;
-				}
-				if(targetData.contains(",")) {
-					for(int k = 0; k < player.getVisibleBuildings().size(); k++) {
-						String check = player.getVisibleBuildings().get(k).getLocation().getX() + "," + 
-								player.getVisibleBuildings().get(k).getLocation().getY();		
-						if(targetData.equals(check)) {
-							toBeRescued = player.getVisibleBuildings().get(k);
-						}
-					}
-				}
-				else {
-					for(int k = 0; k <player.getVisibleCitizens().size();k++) {
-						String check = player.getVisibleCitizens().get(k).getNationalID();
-						if(targetData.equals(check)) {
-							toBeRescued = player.getVisibleCitizens().get(k);
-						}
-					}
+			String name = temp.getName();
+			int coordinates = Integer.parseInt(name);
+			int x1 = coordinates/10;
+			int y1 = coordinates%10;
+			int counter = 0;
+			
+			for(int r = 0 ; r<player.getVisibleBuildings().size(); r ++) {
+				if(player.getVisibleBuildings().get(r).getLocation().getX()==x1 && player.getVisibleBuildings().get(r).getLocation().getY() ==y1) {
+						counter++;
+						
 				}
 				
 			}
+			
+		for(int y = 0 ;y <player.getVisibleCitizens().size() ; y++) {
+			if(player.getVisibleCitizens().get(y).getLocation().getX() == x1 && player.getVisibleCitizens().get(y).getLocation().getY() == y1) {
+				counter ++;
+			}
 		}
+		System.out.println("counter is" + counter);
+		Object [] array = new Object[counter];
+		Rescuable [] arrayR = new Rescuable[counter];
+		counter = 0 ;
+		
+		for(int r = 0 ; r<player.getVisibleBuildings().size(); r ++) {
+			if(player.getVisibleBuildings().get(r).getLocation().getX()==x1 && player.getVisibleBuildings().get(r).getLocation().getY() ==y1) {
+				array[counter] =  player.getVisibleBuildings().get(r).toString();	
+				arrayR[counter++] = player.getVisibleBuildings().get(r);
+					
+			}
+			
+		}
+		
+	for(int y = 0 ;y <player.getVisibleCitizens().size() ; y++) {
+		if(player.getVisibleCitizens().get(y).getLocation().getX() == x1 && player.getVisibleCitizens().get(y).getLocation().getY() == y1) {
+			array[counter] = player.getVisibleCitizens().get(y).toString();
+			arrayR[counter++] = player.getVisibleCitizens().get(y);
+		}
+	}
+	
+	
+	
+	int indexTaken = JOptionPane.showOptionDialog(TargetSelect, "Please choose a target", "Choose target",
+			JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, array, null);
+	
+	if(!(indexTaken ==-1)) {
+		toBeRescued =  arrayR[indexTaken];
+		targetIsSelected = true;
+		
+	}
+	
+	
+			
+			
+			
+			
+		}
+		
+//		if(JOptionButtons.contains(temp)) {
+//			for(int j = 0; j <JOptionButtons.size(); j++) {
+//				if(temp.equals(JOptionButtons.get(j))){
+//					targetData = JOptionButtons.get(j).getName();
+//					targetIsSelected = true;
+//				}
+//				if(targetData.contains(",")) {
+//					for(int k = 0; k < player.getVisibleBuildings().size(); k++) {
+//						String check = player.getVisibleBuildings().get(k).getLocation().getX() + "," + 
+//								player.getVisibleBuildings().get(k).getLocation().getY();		
+//						if(targetData.equals(check)) {
+//							toBeRescued = player.getVisibleBuildings().get(k);
+//						}
+//					}
+//				}
+//				else {
+//					for(int k = 0; k <player.getVisibleCitizens().size();k++) {
+//						String check = player.getVisibleCitizens().get(k).getNationalID();
+//						if(targetData.equals(check)) {
+//							toBeRescued = player.getVisibleCitizens().get(k);
+//						}
+//					}
+//				}
+//				
+//			}
+//		}
 		if(unitsButtons.contains(temp)) {
 			if(targetIsSelected) {
+				System.out.println("I got here ya yuka");
 				for(int j = 0; j < player.getEngine().getEmergencyUnits().size();j++) {
 					if(player.getEngine().getEmergencyUnits().get(j).getUnitID().equals(temp.getName())) {
 						try {
 							player.getEngine().getEmergencyUnits().get(j).respond(toBeRescued);
 						} catch (IncompatibleTargetException | CannotTreatException e1) {
-							e1.printStackTrace();
+							
+							JOptionPane.showMessageDialog(null, e1.getMessage());
 						}
 						targetIsSelected = false;
 					}

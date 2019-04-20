@@ -151,4 +151,8 @@ public class ResidentialBuilding implements Rescuable, Simulatable
 	public void setIconAlreadySet(boolean iconAlreadySet) {
 		this.iconAlreadySet = iconAlreadySet;
 	}
+	
+	public String toString() {
+		return( "Building at : " +this.getLocation().getX() + "," +this.getLocation().getY());
+	}
 }

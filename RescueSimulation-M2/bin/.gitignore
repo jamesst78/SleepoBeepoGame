@@ -1,6 +1,2 @@
-/model/
 /view/
-/controller/
-/simulation/
-/exceptions/
-/tests/
+/model/
