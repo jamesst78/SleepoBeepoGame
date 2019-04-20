@@ -31,30 +31,9 @@ public abstract class Disaster implements Simulatable{
 		return target;
 	}
 	public void strike() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException{
-		if(this.getTarget() instanceof Citizen) {
-			Citizen f = (Citizen)this.getTarget();
-			if(f.getState().equals(CitizenState.DECEASED)) {
-				throw new CitizenAlreadyDeadException(this, "Let the human RIP") ;
-			}
-			else {
 				target.struckBy(this);
 				active=true;
-			}
 		}
-		if(this.getTarget() instanceof ResidentialBuilding) {
-			ResidentialBuilding k = (ResidentialBuilding)this.getTarget();
-			if(k.getFoundationDamage() == 100) {
-				throw new BuildingAlreadyCollapsedException(this, "Building already gone") ;
-			}
-			else {
-				target.struckBy(this);
-				active=true;
-			
-			
-		}
-		}
-		
-	}
 	public boolean isInText() {
 		return inText;
 	}

@@ -14,10 +14,10 @@ public class Collapse extends Disaster {
 	public void strike() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException 
 	{
 		ResidentialBuilding target= (ResidentialBuilding)getTarget();	
-		target.setFoundationDamage(target.getFoundationDamage()+10);
-		if(target.getFoundationDamage() == 100) {
+		if(target.getStructuralIntegrity() == 0) {
 			throw new BuildingAlreadyCollapsedException(this, "Building already gone") ;
 		}
+		target.setFoundationDamage(target.getFoundationDamage()+10);
 		super.strike();
 	}
 	public void cycleStep()

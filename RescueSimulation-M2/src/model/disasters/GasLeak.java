@@ -16,7 +16,7 @@ public class GasLeak extends Disaster {
 	{
 		
 		ResidentialBuilding target= (ResidentialBuilding)getTarget();
-		if(target.getFoundationDamage() == 100) {
+		if(target.getStructuralIntegrity() == 0) {
 			throw new BuildingAlreadyCollapsedException(this, "Building already gone") ;
 		}
 		target.setGasLevel(target.getGasLevel()+10);

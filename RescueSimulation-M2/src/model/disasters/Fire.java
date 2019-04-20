@@ -15,7 +15,7 @@ public class Fire extends Disaster {
 	public void strike() throws CitizenAlreadyDeadException, BuildingAlreadyCollapsedException
 	{
 		ResidentialBuilding target= (ResidentialBuilding)getTarget();
-		if(target.getFoundationDamage() == 100) {
+		if(target.getStructuralIntegrity() == 0) {
 			throw new BuildingAlreadyCollapsedException(this, "Building already gone") ;
 		}
 		target.setFireDamage(target.getFireDamage()+10);
