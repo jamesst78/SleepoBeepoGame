@@ -35,6 +35,7 @@ import exceptions.CitizenAlreadyDeadException;
 import exceptions.IncompatibleTargetException;
 import model.disasters.Disaster;
 import model.infrastructure.ResidentialBuilding;
+import model.people.CitizenState;
 import model.units.UnitState;
 import simulation.Address;
 import simulation.Rescuable;
@@ -65,6 +66,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 	JTextArea t5;
 	JScrollPane scroll;
 	JScrollPane scroll2;
+	int casualities;
 	
 	JOptionPane TargetSelect;
 	CommandCenter player;
@@ -79,6 +81,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 	JButton nextCycleButton;
 	Object [] inThisLocation;
 	GUI gui;
+	JLabel log;
 	Boolean targetIsSelected = false;
 	String targetData = "";
 
@@ -183,7 +186,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		
 		logPanel.setPreferredSize(new Dimension(300,150));
 		logPanel.setBackground(Color.BLACK);
-		JLabel log = new JLabel("Events Log");
+		 log = new JLabel("Events Log | " + "Current Casualities : " + casualities);
 		log.setForeground(Color.WHITE);
 		logPanel.add(log, BorderLayout.NORTH);
 		leftPanel.add(logPanel , BorderLayout.CENTER);
@@ -355,6 +358,15 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 		}
 		temp = allButtons.get(i);
 		if(temp.equals(nextCycleButton)) {
+			
+			for(int p = 0 ; p<this.player.getVisibleCitizens().size() ; p++) {
+				if(this.player.getVisibleCitizens().get(p).getState().equals(CitizenState.DECEASED)) {
+					casualities++;
+				}
+			}
+		 log.setText("Events Log | " + "Current Casualities : " + casualities);
+		 casualities=0;
+			
 			RespondingUnits.repaint();
 			AvailableUnits.repaint();
 			TreatingUnits.repaint();
@@ -407,6 +419,7 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 				for(int j = 0 ; j<player.getVisibleBuildings().size() ; j++) {
 					if(player.getVisibleCitizens().get(i).getLocation().equals(player.getVisibleBuildings().get(j).getLocation())) {
 						player.getVisibleCitizens().get(i).setIconAlreadySet(true);
+						//LAW HENA ALREADY FEH UNIT , LAW FEH HA LOAD EL NEW ICON
 						break;
 					}
 					
@@ -601,6 +614,9 @@ public class GUI extends JFrame implements ActionListener , EventListener {
 			//here we create a JOption
 		
 			String name = temp.getName();
+			if(temp.getName().equals("00")) {
+				return;
+			}
 			int coordinates = Integer.parseInt(name);
 			int x1 = coordinates/10;
 			int y1 = coordinates%10;

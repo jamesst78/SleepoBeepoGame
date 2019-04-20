@@ -212,6 +212,7 @@ public abstract class Unit implements Simulatable, SOSResponder {
 			x+= "At Location : " + target.getLocation().getX() + ","+ target.getLocation().getY() +"\n";
 			
 		}
+		x+= "Unit State : " + this.getState() + "\n";
 		
 		if(this instanceof PoliceUnit) {
 			PoliceUnit y = (PoliceUnit)this;
